@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <h1>Invoice</h1>
-    {!! Form::open(array('class' => 'form-inline', 'method' => 'GET', 'route' => array('item.index'))) !!}
+    {!! Form::open(array('class' => 'form-inline', 'method' => 'GET', 'route' => array('invoice.index'))) !!}
     <div class="input-group">
       <input type="text" name="query" class="form-control" placeholder="Search for...">
       <span class="input-group-btn">
@@ -23,6 +23,7 @@
         </tr>
         @foreach($invoice as $row)
         <tr>
+        {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('invoice.destroy', $row->id))) !!}
             <td>{{$row->invoice_code}}</td>
             <td>{{$row->customer_name}}</td>
             <td>{{$row->customer_phone}}</td>
@@ -31,15 +32,13 @@
             <td>{{$row->shipping_date}}</td>
             <td>{{$row->description}}</td>
             <td>
-				<div class="invoiceId display-none">{{$row->invoice_id}}</div>
-                <div class="invoiceCode display-none">{{$row->invoice_code}}</div>
 				<div class="dropdown">
 				<button class="btn btn-primary dropdown-toggle margin-right-1em" type="button" data-toggle="dropdown">Menu
 				<span class="caret"></span></button>
 					<ul class="dropdown-menu dropdown-menu-right">
-						<li><a href="{{ route('invoice.show', $invoice->id) }}" class="show-btn-invoice">Show Invoice</a></li>
-						<li class=""><a href="{{ route('invoice.edit', $invoice->id) }}" class="edit-btn-invoice">Edit Details</a></li>
-						<li class=""><a href="{{ route('invoce.destroy', $invoice->id) }}">Delete</a></li>
+						<li><a href="{{ route('invoice.show', $row->id) }}">Show Invoice</a></li>
+						<li><a href="{{ route('invoice.edit', $row->id) }}">Edit Details</a></li>
+						<li><a> {!! Form::submit('Delete', array('class' => 'btn btn-danger')) !!}</a></li>
 					</ul>
 				<?php
                     if($row->is_paid == '1'){
@@ -57,14 +56,8 @@
                     }
                 ?>
 				</div>
-                <!-- update button -->
-                {!! link_to_route('item.edit', 'Edit', array($row->id), array('class' => 'btn btn-primary dropdown-toggle margin-right-1em', 'data-toggle' => 'dropdown')) !!}
-                    
-                <!-- delete button -->
-                {!! Form::submit('Delete', array('class' => 'btn btn-danger')) !!}
                 </td>
                 {!! Form::close() !!} 
-            </td>
         </tr>
         @endforeach
     </table>

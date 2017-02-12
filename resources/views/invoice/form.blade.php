@@ -28,7 +28,7 @@
 			</tr>
 			<tr>
 				<td>Address 1</td>
-				<td><input type="text" name="customer_address" class="form-control" maxlength="40" placeholder="Jalan, RT/RW, No Rumah"/></td>
+				<td><input type="text" name="customer_address_1" class="form-control" maxlength="40" placeholder="Jalan, RT/RW, No Rumah"/></td>
 			</tr>
 			<tr>
 				<td>Address 2</td>

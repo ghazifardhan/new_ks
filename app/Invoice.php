@@ -23,7 +23,7 @@ class Invoice extends Model
     	'is_paid'
     ];
 
-    protected $validate = [
+    public $validate = [
     	'invoice_code' => 'required', 
     	'invoice_date' => 'required', 
     	'customer_name' => 'required', 

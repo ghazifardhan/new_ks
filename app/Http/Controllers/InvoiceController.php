@@ -8,6 +8,10 @@ use App\PaymentMethod;
 use App\Customer;
 use App\Voucher;
 use App\InvoiceCodeGenerator;
+use Validator;
+use App\Http\Controllers\Controller;
+use Redirect;
+use Illuminate\Support\Facades\Input;
 
 class InvoiceController extends Controller
 {
@@ -47,7 +51,7 @@ class InvoiceController extends Controller
     }
 
     public function store(Request $request){
-    	$this->validate($request, $invoice->validate);
+    	$this->validate($request, $this->invoice->validate);
     	//$valid = $this->_validate($request->input());
     	$this->invoice->fill([
     				'invoice_code' => $request->input('invoice_code'), 
@@ -65,6 +69,19 @@ class InvoiceController extends Controller
 			    	'is_paid' => '0',
     			]);
     	$this->invoice->save();
-    	return Redirect::route('invoice.index');
+        $invoiceId = $this->invoice->id;
+        $invoice = $this->invoice->find($invoiceId);
+    	return view('invoice.show', compact('invoice'));
+    }
+
+    public function show($id){
+        $invoice = $this->invoice->find($id);
+        return view('invoice.show', compact('invoice'));
+    }
+
+    public function destroy($id){
+        $invoice = $this->invoice->find($id);
+        $invoice->delete();
+        return Redirect::route('invoice.index');
     }
 }
