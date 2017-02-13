@@ -8,9 +8,7 @@
 	  </span>
     </div><!-- /input-group -->
     <br/>
-    <form action="{{ url('/user/create') }}">
-	   <button type="submit" class="btn btn-primary">Create User</button>
-    </form>
+	<button class="btn btn-primary btn-create-user">Create User</button>
 	<br/>
 	<br/>
     <table class="table table-bordered table-hover table-striped table-condensed">
