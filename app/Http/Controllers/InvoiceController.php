@@ -42,18 +42,25 @@ class InvoiceController extends Controller
     }
 
     public function create(){
-    	//$customer = Customer::all();
+    	
     	$paymentMethod = PaymentMethod::all();
-    	//$voucher = Voucher::all();
-    	$invoiceCode = InvoiceCodeGenerator::latest()->first();
-    	$invoiceTransform = $invoiceCode->sku . "/" . $invoiceCode->invoice_code_1 . "/" . $invoiceCode->invoice_code_2;
+    	
+    	
+        $invoiceCode = InvoiceCodeGenerator::latest()->first();
+        if($invoiceCode->date != date("Y-m-d")){
+            $invoiceCode1 = $invoiceCode->invoice_code_1 + 1;
+        } else {
+            $invoiceCode1 = $invoiceCode->invoice_code_1;
+        }
+        $invoiceCode2 = $invoiceCode->invoice_code_2 + 1;
+
+    	$invoiceTransform = $invoiceCode->sku . "/" . $invoiceCode1 . "/" . $invoiceCode2;
 
     	return view('invoice.form', compact('customer', 'paymentMethod', 'voucher', 'invoiceTransform'));
     }
 
     public function store(Request $request){
     	$this->validate($request, $this->invoice->validate);
-    	//$valid = $this->_validate($request->input());
     	$this->invoice->fill([
     				'invoice_code' => $request->input('invoice_code'), 
 			    	'invoice_date' => $request->input('invoice_date'), 
@@ -73,8 +80,22 @@ class InvoiceController extends Controller
     	$this->invoice->save();
         $invoiceId = $this->invoice->id;
         $invoice = $this->invoice->find($invoiceId);
+
+        //Update Invoice Code
+        $invoiceCode = InvoiceCodeGenerator::find(1);
+        if($invoiceCode->date != date("Y-m-d")){
+            $invoiceCode1 = $invoiceCode->invoice_code_1 + 1;
+        } else {
+            $invoiceCode1 = $invoiceCode->invoice_code_1;
+        }
+        $invoiceCode2 = $invoiceCode->invoice_code_2 + 1;
+        $invoiceCode->invoice_code_1 = $invoiceCode1;
+        $invoiceCode->invoice_code_2 = $invoiceCode2;
+        $invoiceCode->date = date("Y-m-d");
+        $invoiceCode->save();
+
+
         return Redirect::route('invoice.show', compact('invoice'));
-    	//return view('invoice.show', compact('invoice'));
     }
 
     public function show($id){

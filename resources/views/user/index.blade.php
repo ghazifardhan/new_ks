@@ -8,7 +8,7 @@
 	  </span>
     </div><!-- /input-group -->
     <br/>
-    <form action="{{ url('/register') }}">
+    <form action="{{ url('/user/create') }}">
 	   <button type="submit" class="btn btn-primary">Create User</button>
     </form>
 	<br/>
@@ -27,7 +27,7 @@
             <td><?php echo $row->username; ?></td>
             <td><?php echo $row->level; ?></td>
             <td>
-                <div class="userId display-none"><?php echo $row->user_id; ?></div>
+                <div class="userId display-none"></div>
 
                 <!-- update button -->
                 {!! link_to_route('category.edit', 'Edit', array($row->id), array('class' => 'btn btn-info')) !!}

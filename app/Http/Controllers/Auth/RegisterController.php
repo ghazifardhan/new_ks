@@ -64,7 +64,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return User
      */
-    /*
+    
     protected function create(array $data)
     {
         return User::create([
@@ -74,16 +74,5 @@ class RegisterController extends Controller
             'level' => $data['level'],
         ]);
     }
-    */
-    protected function register(Request $request)
-    {
-        $this->user->fill([
-                    'name' => $request->input('name'),
-                    'email' => $request->input('email'),
-                    'password' => bcrypt($request->input('password')),
-                    'level' => $request->input('level'),
-                ]);
-        $this->user->save();
-        return Redirect::route('home');
-    }
+    
 }

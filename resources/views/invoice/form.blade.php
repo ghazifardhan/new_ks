@@ -8,6 +8,11 @@
         @endforeach
     </div>
 @endif
+<?php
+
+
+
+?>
 {!! Form::model(new App\Invoice, ['class' => 'form-horizontal', 'route' => 'invoice.store']) !!}
         <table class='table table-hover table-responsive table-bordered'>
             <tr>
