@@ -48,6 +48,9 @@ Route::resource('invoice', 'InvoiceController');
 // User Route
 Route::resource('user', 'UserController');
 
+// Transaction Route
+Route::resource('invoice.transaction', 'TransactionController');
+
 Route::get('/customer', 'CustomerController@autocomplete');
 Route::get('/customer/voucher', 'CustomerController@populateVoucher');
 
