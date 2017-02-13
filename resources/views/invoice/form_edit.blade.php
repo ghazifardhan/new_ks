@@ -43,7 +43,7 @@
 				<td>
                 <select name="payment_method" class="form-control" required>
 	                    @foreach($paymentMethod as $pm)
-	                    <option value="<?php echo $pm->id;?>" <?php if($pm->id==$invoice->payment_method){echo 'selected';} ?>><?php echo $pm->name;?></option>
+	                    <option value="<?php echo $pm->id;?>" <?php if($pm->id==$invoice->payment_method){echo 'selected';	} ?>><?php echo $pm->name;?></option>
 	                    @endforeach
                 </select>
                 </td>
