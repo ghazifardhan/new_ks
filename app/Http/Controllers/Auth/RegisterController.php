@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -28,6 +29,7 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = '/home';
+    public $user;
 
     /**
      * Create a new controller instance.
@@ -35,7 +37,8 @@ class RegisterController extends Controller
      * @return void
      */
     public function __construct()
-    {
+    {   
+        $this->user = new User();
         $this->middleware('guest');
     }
 
@@ -51,6 +54,7 @@ class RegisterController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
+            'level' => 'required',
         ]);
     }
 
@@ -60,12 +64,26 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return User
      */
+    /*
     protected function create(array $data)
     {
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'level' => $data['level'],
         ]);
+    }
+    */
+    protected function register(Request $request)
+    {
+        $this->user->fill([
+                    'name' => $request->input('name'),
+                    'email' => $request->input('email'),
+                    'password' => bcrypt($request->input('password')),
+                    'level' => $request->input('level'),
+                ]);
+        $this->user->save();
+        return Redirect::route('home');
     }
 }

@@ -15,6 +15,7 @@ class UnitController extends Controller
 
     public function __construct(){
     	$this->unit = new Unit();
+        $this->middleware('auth');
     }
 
     protected $rules = [

@@ -22,6 +22,7 @@ class ItemController extends Controller
 
     public function __construct(){
     	$this->item = new Item();
+        $this->middleware('auth');
     }
 
     public function index(Request $request){

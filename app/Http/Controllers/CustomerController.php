@@ -13,6 +13,7 @@ class CustomerController extends Controller
 
     public function __construct(){
     	$this->customer = new Customer();
+        $this->middleware('auth');
     }
 
     public function autocomplete(){

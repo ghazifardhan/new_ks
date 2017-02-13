@@ -20,6 +20,7 @@ class Invoice extends Model
     	'voucher',
     	'description',
     	'description_2',
+        'total',
     	'is_paid'
     ];
 

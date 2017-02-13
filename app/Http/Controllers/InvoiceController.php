@@ -19,6 +19,7 @@ class InvoiceController extends Controller
 
     public function __construct(){
     	$this->invoice = new Invoice();
+        $this->middleware('auth');
     }
 
     public function index(Request $request){
@@ -66,12 +67,14 @@ class InvoiceController extends Controller
 			    	'voucher' => $request->input('voucher'),
 			    	'description' => $request->input('description'),
 			    	'description_2' => $request->input('description_2'),
+                    'total' => '0',
 			    	'is_paid' => '0',
     			]);
     	$this->invoice->save();
         $invoiceId = $this->invoice->id;
         $invoice = $this->invoice->find($invoiceId);
-    	return view('invoice.show', compact('invoice'));
+        return Redirect::route('invoice.show', compact('invoice'));
+    	//return view('invoice.show', compact('invoice'));
     }
 
     public function show($id){

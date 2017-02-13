@@ -21,7 +21,15 @@
             <th>Description</th>
             <th>Option</th>
         </tr>
+        <?php $prevGroup = ""; ?>
         @foreach($invoice as $row)
+        <?php 
+        $group = $row->invoice_date;
+        if($group !== $prevGroup){
+            echo '<tr><td colspan="8" style="background-color: #84C126;"></tr>';
+            $prevGroup = $group;
+        }
+        ?>
         <tr>
         {!! Form::open(array('class' => 'form-inline', 'method' => 'DELETE', 'route' => array('invoice.destroy', $row->id))) !!}
             <td>{{$row->invoice_code}}</td>

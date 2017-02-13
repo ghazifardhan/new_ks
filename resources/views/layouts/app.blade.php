@@ -8,12 +8,12 @@
         
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <!-- custom CSS -->
-        <link href="http://128.199.226.96/libs/css/keranjangsayur.css" rel="stylesheet" />        
-        <link rel="shortcut icon" href="http://128.199.226.96/libs/images/favicon.ico" type="image/x-icon">
-        <link href="http://128.199.226.96/libs/js/bootstrap/dist/css/bootstrap-chosen.css" rel="stylesheet" />
+        <link href="{{ asset('/libs/css/keranjangsayur.css') }}" rel="stylesheet" />        
+        <link rel="shortcut icon" href="{{ asset('/images/favicon.ico') }}" type="image/x-icon">
+        <link href="{{ asset('/libs/js/bootstrap/dist/css/bootstrap-chosen.css') }}" rel="stylesheet" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-        <link href="http://128.199.226.96/libs/js/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <link href="{{ asset('/libs/js/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet" />
         
         <style>
             .navbar-inverse {
@@ -80,11 +80,27 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <!-- dropdown navbar login -->
-                    <li role="presentation" class="dropdown"><a class="dropdown-toogle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expended="false" style="color: white;">Logged as <span class="caret"></span></a>
+                    <li role="presentation" class="dropdown"><a class="dropdown-toogle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expended="false" style="color: white;">Logged as {{ Auth::user()->name }}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li class="disabled"><a href="javascript://" id="show-user" class="not-active">User Control</a></li>
+                            <?php
+                            $isEnabled = "";    
+                            if(Auth::user()->level == 3){
+                                $isEnabled = "";
+                            } else {
+                                $isEnabled = "disabled";
+                            }
+                            ?>
+                            <li class="<?php echo $isEnabled; ?>"><a href="{{ url('/user/') }}" id="show-user" class="<?php echo $isEnabled; ?>">User Control</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="views/logout.php" id="logout">Logout</a></li>
+                            <li><a href="{{ url('/logout') }}"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            Logout
+                                        </a>
+
+                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form></li>
                         </ul>
                     </li>
                 </ul>
@@ -103,14 +119,14 @@
     <!--<div id="footer">Keranjang Sayur &copy; 2016</div>-->
 
 <!-- jQuery library -->
-<script src="http://128.199.226.96/libs/js/jquery.js"></script>
-<script src="http://128.199.226.96/libs/js/chosen/chosen.jquery.js"></script>
-<script src="http://128.199.226.96/libs/js/chosen/chosen.jquery.min.js"></script>
+<script src="{{ asset('/libs/js/jquery.js') }}"></script>
+<script src="{{ asset('/libs/js/chosen/chosen.jquery.js') }}"></script>
+<script src="{{ asset('/libs/js/chosen/chosen.jquery.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
  
 <!-- bootstrap JavaScript -->
 <!-- Latest compiled and minified JavaScript -->
-<script src="http://128.199.226.96/libs/js/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{{ asset('/libs/js/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <!--
 <script src="http://128.199.226.96libs/js/script.js"></script>
 -->
@@ -119,9 +135,7 @@
 <script>
 $(document).ready(function(){
     $('.chosen-select').chosen({width : "300px"});
-
     getDataVoucher();
-
     function getDataVoucher(){
             $(".customerName").autocomplete({
                   source: 'http://localhost/new_ks/public/customer',
@@ -144,9 +158,7 @@ $(document).ready(function(){
                     }
                 }
             });
-
             $('#voucherChooser').select2();
-
             $('#voucherChooser').change(function(){
                 var sum = 0;
                 $("#voucherChooser option:selected").each(function(){

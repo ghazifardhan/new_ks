@@ -20,6 +20,7 @@ class HighlightController extends Controller
 
     public function __construct(){
     	$this->highlight = new Highlight();
+        $this->middleware('auth');
     }
 
     public function index(Request $request){

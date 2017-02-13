@@ -11,13 +11,18 @@
 |
 */
 
+
+Auth::routes();
+
 Route::get('/', function () {
-    return view('login');
+    return view('auth/login');
 });
 
+/*
 Route::get('/app', function () {
     return view('layouts/app');
 });
+*/
 
 // Category Route
 
@@ -40,5 +45,11 @@ Route::resource('item', 'ItemController');
 // Invoice Route
 Route::resource('invoice', 'InvoiceController');
 
+// User Route
+Route::resource('user', 'UserController');
+
 Route::get('/customer', 'CustomerController@autocomplete');
 Route::get('/customer/voucher', 'CustomerController@populateVoucher');
+
+
+Route::get('/home', 'HomeController@index');
