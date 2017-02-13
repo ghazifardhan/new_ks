@@ -35,6 +35,6 @@ class Invoice extends Model
     ];
 
     public function transaction(){
-    	return $this->hasMany('App\Transaction', 'invoice_id');
+    	return $this->hasMany('App\Transaction');
     }
 }

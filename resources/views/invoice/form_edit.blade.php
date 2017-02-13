@@ -1,86 +1,80 @@
-<?php
-
-include_once '../../models/Include.php';
-
-// get invoice code
-$invoiceCode = isset($_GET['invoice_code']) ? $_GET['invoice_code'] : die('Error: Invoice ID not found!');
-$invoice->invoiceCode = $invoiceCode;
-$stmt = $invoice->readOne();
-$row = $stmt->fetch(PDO::FETCH_OBJ);
-
-$voucher->invoiceId = $row->invoice_id;
-$voucher->isNotUsed();
-
-?>
-	<h1>Update Invoice: <?php echo $row->invoice_code; ?></h1>
-	<form id="form_update_invoice" action="javascript://" method="POST" border='0'>
-		<input type="hidden" name="invoiceId" value="<?php echo $row->invoice_id;?>">
+@extends('layouts.app')
+@section('content')
+<h1>Create New Invoice</h1>
+@if($errors->any())
+    <div class="flash alert-danger">
+        @foreach($errors->all() as $error)
+        <p>{{ $error }}</p>
+        @endforeach
+    </div>
+@endif
+{!! Form::model($invoice, ['method' => 'PATCH', 'route' => ['invoice.update', $invoice->id], 'class' => 'form-horizontal']) !!}
         <table class='table table-hover table-responsive table-bordered'>
-			<tr>
+            <tr>
 				<td>Invoice Code</td>
-				<td><input type="text" id="invoiceCode" name="invoiceCode" class="form-control" value="<?php echo $row->invoice_code; ?>" readonly/></td>
+				<td><input type="text" id="invoiceCode" name="invoice_code" class="form-control" value="{{ $invoice->invoice_code }}" readonly/></td>
 			</tr>
 			<tr>
 				<td>Invoice Date</td>
-				<td><input type="date" name="invoiceDate" class="form-control" value="<?php echo $row->invoice_date; ?>"/></td>
+				<td><input type="date" name="invoice_date" class="form-control" value="{{ $invoice->invoice_date }}"/></td>
 			</tr>
 			<tr>
 				<td>Customer Name</td>
-				<td><input type="text" name="customerName" class="form-control customerName" value="<?php echo $row->customer_name; ?>"/></td>
+				<td><input type="text" name="customer_name" class="form-control customerName" value="{{ $invoice->customer_name }}"/></td>
 			</tr>
 			<tr>
 				<td>Customer Phone</td>
-				<td><input type="text" name="customerPhone" class="form-control" value="<?php echo $row->customer_phone; ?>"/></td>
+				<td><input type="text" name="customer_phone" class="form-control" value="{{ $invoice->customer_phone }}"/></td>
 			</tr>
 			<tr>
 				<td>Address 1</td>
-				<td><input type="text" name="customerAddress" class="form-control" maxlength="50" value="<?php echo $row->customer_address; ?>"/></td>
+				<td><input type="text" name="customer_address_1" class="form-control" maxlength="40" placeholder="Jalan, RT/RW, No Rumah"  value="{{ $invoice->customer_address_1 }}"/></td>
 			</tr>
 			<tr>
 				<td>Address 2</td>
-				<td><input type="text" name="customerAddress2" class="form-control"  maxlength="50" value="<?php echo $row->customer_address_2; ?>"/></td>
+				<td><input type="text" name="customer_address_2" class="form-control" maxlength="40" placeholder="Kecamatan, Kelurahan" value="{{ $invoice->customer_address_2 }}"/></td>
 			</tr>
 			<tr>
 				<td>Address 3</td>
-				<td><input type="text" name="customerAddress3" class="form-control"  maxlength="50" value="<?php echo $row->customer_address_3; ?>"/></td>
+				<td><input type="text" name="customer_address_3" class="form-control" maxlength="40" placeholder="Kota" value="{{ $invoice->customer_address_3 }}"/></td>
 			</tr>
             <tr>
 				<td>Payment Method</td>
 				<td>
-                	<select name="paymentMethod" class="form-control">
-						<?php 
-						$stmt = $payment->index();
-						while($rows = $stmt->fetch(PDO::FETCH_OBJ)){
-						?>
-						<option value="<?php echo $rows->payment_method_id;?>" 
-						<?php if($rows->payment_method_id == $row->payment_method){ echo 'selected';}?>>
-						<?php echo $rows->payment_method_name; ?>
-						</option>
-						<?php } ?>
-					</select>
+                <select name="payment_method" class="form-control" required>
+	                    @foreach($paymentMethod as $pm)
+	                    <option value="<?php echo $pm->id;?>" <?php if($pm->id==$invoice->payment_method){echo 'selected';} ?>><?php echo $pm->name;?></option>
+	                    @endforeach
+                </select>
                 </td>
             </tr>
             <tr>
 				<td>Shipping Date</td>
-				<td><input type="date" name="shippingDate" class="form-control" value="<?php echo $row->shipping_date; ?>"/></td>
+				<td><input type="date" name="shipping_date" class="form-control" value="{{ $invoice->shipping_date }}" required/></td>
 			</tr>
             <tr>
-				<td>Potongan / Voucher</td>
-				<td><select id="voucherChooser" data-placeholder="Voucher" name="voucherChooser[]" class="form-control" multiple="multiple" style="width: 300px">
+				<td>Potongan/Voucher</td>
+				<td><select id="voucherChooser" data-placeholder="Voucher" name="voucher_chooser[]" class="form-control" multiple="multiple" style="width: 300px">
                     </select>
-				</td>
-</tr><td></td>
-				<td><input type="number" name="voucher" value="<?php echo $row->voucher; ?>" class="form-control voucherResult" style="width: 300px"/>
-				</td>
+                    </td>
+			</tr>
+<tr>
+				<td></td>
+				<td>
+                    <input type="number" name="voucher" class="form-control voucherResult" style="width: 300px" value="{{ $invoice->voucher }}"/>
+                    </td>
 			</tr>
 			<tr>
 				<td>Description</td>
-				<td><input type="text" name="description" class="form-control" value="<?php echo $row->description; ?>"/></td>
+				<td><input type="text" name="description" class="form-control" value="{{ $invoice->description }}" /></td>
 			</tr>
+			<tr>
 				<td>Description 2</td>
-				<td><input type="text" name="description2" class="form-control" value="<?php echo $row->description_2; ?>"/></td>
+				<td><input type="text" name="description_2" class="form-control" value="{{ $invoice->descriptionc }}" /></td>
 			</tr>
 			<tr>
                 <td></td>
                 <td><button type="submit" name="submit" class='btn btn-primary'><span class='glyphicon glyphicon-plus'></span> Submit</button></td>
-            </tr>	
+            </tr>
+        {!! Form::close() !!}
+@endsection

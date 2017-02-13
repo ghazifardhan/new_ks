@@ -8,6 +8,7 @@ use App\PaymentMethod;
 use App\Customer;
 use App\Voucher;
 use App\InvoiceCodeGenerator;
+use App\transaction;
 use Validator;
 use App\Http\Controllers\Controller;
 use Redirect;
@@ -56,7 +57,7 @@ class InvoiceController extends Controller
 
     	$invoiceTransform = $invoiceCode->sku . "/" . $invoiceCode1 . "/" . $invoiceCode2;
 
-    	return view('invoice.form', compact('customer', 'paymentMethod', 'voucher', 'invoiceTransform'));
+    	return view('invoice.form', compact('customer', 'paymentMethod'));
     }
 
     public function store(Request $request){
@@ -98,9 +99,41 @@ class InvoiceController extends Controller
         return Redirect::route('invoice.show', compact('invoice'));
     }
 
+    public function edit($id){
+        $invoice = $this->invoice->find($id);
+        $paymentMethod = PaymentMethod::all();
+        return view('invoice.form_edit', compact('invoice', 'paymentMethod'));
+    }
+
+    public function update(Request $request, $id){
+        $this->validate($request, $this->invoice->validate);
+        $invoice = $this->invoice->find($id);
+        $invoice->customer_name = $request->input('customer_name');
+        $invoice->invoice_date = $request->input('invoice_date');
+        $invoice->customer_phone = $request->input('customer_phone');
+        $invoice->customer_address_1 = $request->input('customer_address_1');
+        $invoice->customer_address_2 = $request->input('customer_address_2');
+        $invoice->customer_address_3 = $request->input('customer_address_3');
+        $invoice->payment_method = $request->input('payment_method');
+        $invoice->shipping_date = $request->input('shipping_date');
+        $invoice->voucher = $request->input('voucher');
+        $invoice->description = $request->input('description');
+        $invoice->description_2 = $request->input('description_2');
+        $invoice->save();
+        return Redirect::route('invoice.show', compact('invoice'));
+    }
+
     public function show($id){
         $invoice = $this->invoice->find($id);
-        return view('invoice.show', compact('invoice'));
+        $transaction = Transaction::join('item', 'transaction.item_id', '=', 'item.id')
+                            ->join('unit', 'item.unit_id','=','unit.id')
+                            ->join('highlight', 'item.highlight_id','=','highlight.id')
+                            ->select('transaction.id', 'transaction.invoice_id', 'transaction.item_id', 'item.item_name', 'transaction.item_qty', 'unit.unit_name', 'transaction.item_price', 'transaction.discount', 'transaction.deduction','item.real_price','transaction.description', 'transaction.created_at', 'highlight.highlight_color')
+                            ->where('transaction.invoice_id','=',$invoice->id)
+                            ->get();
+        $res['result'] = $transaction;
+        //return response($res);
+        return view('invoice.show', compact('invoice', 'transaction'));
     }
 
     public function destroy($id){

@@ -22,6 +22,8 @@ class UnitController extends Controller
     	'unit_name' => 'required'
     ];
 
+    
+
     public function index(Request $request){
     	$query = $request->get('query');
     	if($query!=null){

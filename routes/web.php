@@ -51,8 +51,11 @@ Route::resource('user', 'UserController');
 // Transaction Route
 Route::resource('invoice.transaction', 'TransactionController');
 
+// JSON Output
 Route::get('/customer', 'CustomerController@autocomplete');
 Route::get('/customer/voucher', 'CustomerController@populateVoucher');
+Route::get('/itemJson', 'ItemController@itemJson');
+Route::get('/unitJson', 'ItemController@unitJson');
 
 
 Route::get('/home', 'HomeController@index');

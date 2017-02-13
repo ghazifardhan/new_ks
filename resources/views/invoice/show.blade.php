@@ -11,7 +11,10 @@
     <button class="btn btn-success create-btn-transaction margin-right-1em" disabled><span class='glyphicon glyphicon-ok'></span> Paid</button>
 <?php
 } else {?>
-    <button class="btn btn-info create-btn-transaction margin-right-1em" <?php if($invoice->is_paid == '1'){ echo 'disabled';}?>><span class='glyphicon glyphicon-plus'></span> New Transaction</button>
+    <a href="{{ route('invoice.transaction.create', array($invoice->id)) }}" class="btn btn-info"><span class='glyphicon glyphicon-plus'></span>New Transaction</a>
+    <!--
+    <button type="button" href="{{ route('invoice.transaction.create', array($invoice->id)) }}" class="btn btn-info create-btn-transaction margin-right-1em" <?php if($invoice->is_paid == '1'){ echo 'disabled';}?>><span class='glyphicon glyphicon-plus'></span> New Transaction</button>
+    -->
 <?php    
     }
 ?>
@@ -96,18 +99,21 @@
             <th class='col-md-2'>Menu</th>
             <!--<th>Option</th>-->
         </tr>
+        <?php $x = 1; ?>
+        @foreach($transaction as $row)
         <tr>
-            <td class='col-md-2'></td>
-            <td class='col-md-2'></td>
-            <td class='col-md-2'></td>
-            <td class='col-md-2'></td>
-            <td class='col-md-2'></td>
-            <td class='col-md-2'></td>
-            <td class='col-md-2'></td>
-			<td class='col-md-2'></td>
+            <td class='col-md-2'>{{ $x++ }}</td>
+            <td class='col-md-2'><?php echo $row->item_name; ?></td>
+            <td class='col-md-2'><?php echo $row->unit_name; ?></td>
+            <td class='col-md-2'><?php echo $row->item_qty; ?></td>
+            <td class='col-md-2'><?php echo $row->discount; ?></td>
+            <td class='col-md-2'><?php echo $row->deduction; ?></td>
+            <td class='col-md-2'><?php echo $row->item_price; ?></td>
+			<td class='col-md-2'><?php echo $row->description; ?></td>
 			<td>
 			</td>
         </tr>
+        @endforeach
 		<tr>
             <td class='col-md-2'></td>
             <td class='col-md-2'></td>

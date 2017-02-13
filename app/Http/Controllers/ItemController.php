@@ -25,6 +25,21 @@ class ItemController extends Controller
         $this->middleware('auth');
     }
 
+    public function itemJson(){
+        $item = $this->item->all();
+        return response($item);
+    }
+
+    public function unitJson(Request $request){
+        $id = $request->get('item_id');
+        $item = $this->item
+                    ->join('unit', 'item.unit_id','=','unit_id')
+                    ->select('item.id', 'item.item_name','unit.unit_name')
+                    ->where('item.id','=',$id)
+                    ->get();
+        return response($item);
+    }
+
     public function index(Request $request){
     	$query = $request->get('query');
     	if($query!=null){
