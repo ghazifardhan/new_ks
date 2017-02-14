@@ -10,6 +10,7 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Redirect;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -32,18 +33,39 @@ class TransactionController extends Controller
 
     public function store(Request $request, $id){
     	$invoice = Invoice::find($id);
-        $array = $_POST['item_id'];
-        for($x=0;$x<count($array);$x++){
-            $this->transaction->fill([
-                    'invoice_id' => $invoice->id,
-                    'item_id' => $_POST['item_id'][$x],
-                    'item_qty' => $_POST['item_qty'][$x],
-                    'discount' => $_POST['discount'][$x],
-                    'deduction' => $_POST['deduction'][$x],
-                    'description' => $_POST['description'][$x],
-                    'item_price' => $x,
-                ]);
-            $this->transaction->save();
-        }      
+        $array = $request->input('item_qty');
+        $item_id = $request->input('item_id');
+        $item_qty = $request->input('item_qty');
+        $discount = $request->input('discount');
+        $deduction = $request->input('deduction');
+        $description = $request->input('description');
+
+        for($x = 0 ; $x < count($array) ; $x++){
+
+            $item = Item::find($item_id[$x]);
+            //print_r($item->item_name);
+            
+            DB::table('transaction')->insert(
+            [
+            'invoice_id' => $invoice->id, 
+            'item_id' => $item_id[$x], 
+            'item_qty'=>$item_qty[$x], 
+            'discount'=>$discount[$x],
+            'deduction'=>$deduction[$x], 
+            'description'=>$description[$x], 
+            'item_price' => ($item->real_price*$item_qty[$x]*((100-$discount[$x])/100))-$deduction[$x], ]
+            );
+        }
+        return Redirect::route('invoice.show', compact('invoice'));
+    }
+
+    public function batchDelete(Request $request, $id){
+        $invoice = Invoice::find($id);
+        $array = $request->input('delete');
+        //print_r($array);
+        foreach($array as $key => $val){
+            DB::table('transaction')->where('id', '=', $val)->delete();    
+        }
+        return Redirect::route('invoice.show', compact('invoice'));
     }
 }

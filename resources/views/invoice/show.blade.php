@@ -99,8 +99,10 @@
             <th class='col-md-2'>Menu</th>
             <!--<th>Option</th>-->
         </tr>
-        <?php $x = 1; ?>
+        {!! Form::open(array('class' => 'form-inline', 'method' => 'POST', 'route' => array('batchdelete', $invoice->id))) !!}
+        <?php $x = 1; $total = 0;?>
         @foreach($transaction as $row)
+        <?php  $total += $row->item_price;  ?>
         <tr>
             <td class='col-md-2'>{{ $x++ }}</td>
             <td class='col-md-2'><?php echo $row->item_name; ?></td>
@@ -110,7 +112,7 @@
             <td class='col-md-2'><?php echo $row->deduction; ?></td>
             <td class='col-md-2'><?php echo $row->item_price; ?></td>
 			<td class='col-md-2'><?php echo $row->description; ?></td>
-			<td>
+			<td><input type="checkbox" name="delete[]" value="{{ $row->id }}">
 			</td>
         </tr>
         @endforeach
@@ -121,20 +123,24 @@
             <td class='col-md-2'></td>
             <td class='col-md-2'></td>
             <td class='col-md-2'></td>
+            <td class='col-md-2'></td>
+            <td class='col-md-2'></td>
+            <td class='col-md-2'>{!! Form::submit('Delete', array('class' => 'btn btn-danger')) !!} </td>
         </tr>
+        {!! Form::close() !!}
 		<tr>
             <td class='col-md-2' colspan="6"><strong>Total</strong></td>
-            <td class='col-md-2'><strong></td>
+            <td class='col-md-2'><strong>{{ $total }}</strong></td>
 			<td class='col-md-2'></td>
         </tr>
         <tr>
             <td class='col-md-2' colspan="6"><strong>Potongan/Voucher</strong></td>
-            <td class='col-md-2'><strong></td>
+            <td class='col-md-2'><strong>{{ $invoice->voucher }}</strong></td>
             <td class='col-md-2'></td>
         </tr>
         <tr>
             <td class='col-md-2' colspan="6"><strong>Grand Total</strong></td>
-            <td class='col-md-2'><strong></td>
+            <td class='col-md-2'><strong>{{ $total - $invoice->voucher }}</td>
             <td class='col-md-2'></td>
         </tr>
     </table>

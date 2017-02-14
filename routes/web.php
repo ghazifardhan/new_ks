@@ -57,5 +57,7 @@ Route::get('/customer/voucher', 'CustomerController@populateVoucher');
 Route::get('/itemJson', 'ItemController@itemJson');
 Route::get('/unitJson', 'ItemController@unitJson');
 
+Route::post('/batchDelete/{id}', ['as' => 'batchdelete', 'uses' => 'TransactionController@batchDelete']);
+
 
 Route::get('/home', 'HomeController@index');

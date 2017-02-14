@@ -21,17 +21,17 @@
 			</tr>
 			<tr>
 				<td>Qty</td>
-				<td><div id="result1"><div class="input-group"><input type="text" name="item_qty[]" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" required/><span class="input-group-addon" id="basic-addon2"></span></div></div></td>
+				<td><div id="result1"><div class="input-group"><input type="number" name="item_qty[]" class="form-control" required/><span class="input-group-addon" id="basic-addon2"></span></div></div></td>
 			</tr>
 			<tr>
 				<td>Discount</td>
-				<td><div class="input-group"><input type="number" name="discount[]" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" aria-describedby="basic-addon2"/>
+				<td><div class="input-group"><input type="number" name="discount[]" class="form-control" aria-describedby="basic-addon2" value="0"/>
 					<span class="input-group-addon" id="basic-addon2">%</span></div>
 				</td>
 			</tr>
 			<tr>
 				<td>Potongan</td>
-				<td><input type="number" name="deduction[]" class="form-control" pattern="[0-9]+([\.,][0-9]+)?" step="0.01"/></div>
+				<td><input type="number" name="deduction[]" class="form-control" value="0"/></div>
 				</td>
 			</tr>
 			<tr>

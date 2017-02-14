@@ -219,7 +219,7 @@ $(document).ready(function(){
                     dataType: 'json',
                     success: function (data) {
                         $.each(data, function(index, element) {
-                            $('div[id="result'+i+'"]').html('<div class="input-group"><input type="number" name="itemQty[]" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" required /><span class="input-group-addon" id="basic-addon2">'+element.unit_name+'</span></div>');
+                            $('div[id="result'+i+'"]').html('<div class="input-group"><input type="number" name="item_qty[]" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" required /><span class="input-group-addon" id="basic-addon2">'+element.unit_name+'</span></div>');
                         });
                     }
                 });
@@ -237,7 +237,7 @@ $(document).ready(function(){
                     dataType: 'json',
                     success: function (data) {
                         $.each(data, function(index, element) {
-                            $('div[id="result'+i+'"]').html('<div class="input-group"><input type="number" name="itemQty" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" required /><span class="input-group-addon" id="basic-addon2">'+element.unit_name+'</span></div>');
+                            $('div[id="result'+i+'"]').html('<div class="input-group"><input type="number" name="item_qty" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" required /><span class="input-group-addon" id="basic-addon2">'+element.unit_name+'</span></div>');
                         });
                     }
                 });
@@ -254,7 +254,7 @@ $(document).ready(function(){
                 e.preventDefault();
                 if(x < max_fields){
                     x++;
-                    $(wrapper).append('<div class="panel panel-default"><div class="panel-heading">Item '+ x +' <button type="button" class="btn btn-danger remove-field" style="margin-top: -7px; padding: -2px; float: right;">X</button></div><div class="panel-body"><table class="table table-hover table-responsive table-bordered""><tr><td>Item Name</td><td><select id="item'+x+'" data-placeholder="Choose Item" name="item_id[]" class="form-control chosen-select" required></select></td></tr><tr><td>Qty</td><td><div id="result'+x+'"><div class="input-group"><input type="number" name="item_qty[]" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" required /><span class="input-group-addon" id="basic-addon2"></span></div></div></td></tr><tr><td>Discount</td><td><div class="input-group"><input type="number" name="discount[]" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" aria-describedby="basic-addon2" value="0"/><span class="input-group-addon" id="basic-addon2">%</span></div></td></tr><tr><td>Potongan</td><td><input type="number" name="deduction[]" class="form-control" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" value="0"/></div></td></tr><td>Description</td><td><input type="text" name="description[]" class="form-control" value=" "/></td></tr></table></div></div>');
+                    $(wrapper).append('<div class="panel panel-default"><div class="panel-heading">Item '+ x +' <button type="button" class="btn btn-danger remove-field" style="margin-top: -7px; padding: -2px; float: right;">X</button></div><div class="panel-body"><table class="table table-hover table-responsive table-bordered""><tr><td>Item Name</td><td><select id="item'+x+'" data-placeholder="Choose Item" name="item_id[]" class="form-control chosen-select" required></select></td></tr><tr><td>Qty</td><td><div id="result'+x+'"><div class="input-group"><input type="number" name="item_qty[]" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" required /><span class="input-group-addon" id="basic-addon2"></span></div></div></td></tr><tr><td>Discount</td><td><div class="input-group"><input type="number" name="discount[]" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" class="form-control" aria-describedby="basic-addon2" value="0"/><span class="input-group-addon" id="basic-addon2">%</span></div></td></tr><tr><td>Potongan</td><td><input type="number" name="deduction[]" class="form-control" pattern="[0-9]+([\.,][0-9]+)?" step="0.01" value="0"/></div></td></tr><td>Description</td><td><input type="text" name="description[]" class="form-control"/></td></tr></table></div></div>');
                     getData(x);
                     getUnit(x);
                 }

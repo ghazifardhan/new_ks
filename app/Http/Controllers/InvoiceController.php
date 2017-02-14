@@ -57,7 +57,7 @@ class InvoiceController extends Controller
 
     	$invoiceTransform = $invoiceCode->sku . "/" . $invoiceCode1 . "/" . $invoiceCode2;
 
-    	return view('invoice.form', compact('customer', 'paymentMethod'));
+    	return view('invoice.form', compact('customer', 'paymentMethod', 'invoiceTransform'));
     }
 
     public function store(Request $request){
