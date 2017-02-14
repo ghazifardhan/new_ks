@@ -32,19 +32,18 @@ class TransactionController extends Controller
 
     public function store(Request $request, $id){
     	$invoice = Invoice::find($id);
-
-    	$array = $request->input('item_id');
-    	for($x=0;$x<count($array);$x++){
-    		$this->transaction->fill([
-    			'invoice_id' => $invoice->id,
-    			'item_id' => $request->input('item_id.'.$x),
-    			'item_qty' => $request->input('item_qty.'.$x),
-    			'discount' => $request->input('discount.'.$x),
-    			'deduction' => $request->input('deduction.'.$x),
-    			'description' => $request->input('description.'.$x),
-    			'item_price' => '1000'
-    		]);
-    		$this->transaction->save();	
-    	}
+        $array = $_POST['item_id'];
+        for($x=0;$x<count($array);$x++){
+            $this->transaction->fill([
+                    'invoice_id' => $invoice->id,
+                    'item_id' => $_POST['item_id'][$x],
+                    'item_qty' => $_POST['item_qty'][$x],
+                    'discount' => $_POST['discount'][$x],
+                    'deduction' => $_POST['deduction'][$x],
+                    'description' => $_POST['description'][$x],
+                    'item_price' => $x,
+                ]);
+            $this->transaction->save();
+        }      
     }
 }
