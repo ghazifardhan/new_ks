@@ -16,7 +16,8 @@
             <th>Category</th>
             <th>Unit</th>
             <th>Subunit</th>
-            <th>Price</th>
+            <th>Sale Price</th>
+            <th>Purchase Price</th>
             <th>Highlight</th>
             <th>Description</th>
             <th>Option</th>
@@ -29,6 +30,7 @@
             <td>{{$row->unit_name}}</td>
             <td>{{$row->onqty}}</td>
             <td>{{number_format($row->price,0,',','.')}}</td>
+            <td>{{number_format($row->purchase_price,0,',','.')}}</td>
             <td>{{$row->highlight_name}}</td>
             <td>{{$row->description}}</td>
             <td>

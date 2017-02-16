@@ -44,8 +44,12 @@
                 </td>
             </tr>
             <tr>
-                <td class='col-md-2'>Price</td>
+                <td class='col-md-2'>Sale Price</td>
                 <td class='col-md-6'><input type="number" name="price" class='form-control'></td>
+            </tr>
+            <tr>
+                <td class='col-md-2'>Purchase Price</td>
+                <td class='col-md-6'><input type="number" name="purchase_price" class='form-control'></td>
             </tr>
 			<tr>
                 <td class='col-md-2'>Highlight</td>

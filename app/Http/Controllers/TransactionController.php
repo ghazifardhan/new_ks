@@ -8,6 +8,7 @@ use App\Item;
 use App\Transaction;
 use Validator;
 use App\Http\Controllers\Controller;
+use App\User;
 use Redirect;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -56,6 +57,29 @@ class TransactionController extends Controller
             'item_price' => ($item->real_price*$item_qty[$x]*((100-$discount[$x])/100))-$deduction[$x], ]
             );
         }
+        return Redirect::route('invoice.show', compact('invoice'));
+    }
+
+    public function edit($id, $idtrans){
+        $invoice = Invoice::find($id);
+        $transaction = $this->transaction->find($idtrans);
+        $item = Item::all();
+
+        return view('transaction.form_edit', compact('invoice', 'transaction', 'item'));
+    }
+
+    public function update(Request $request, $id, $idtrans){
+        $invoice = Invoice::find($id);
+        $transaction = $this->transaction->find($idtrans);
+        $item = Item::find($request->input('item_id'));
+
+        $transaction->item_id = $request->input('item_id');
+        $transaction->item_qty = $request->input('item_qty');
+        $transaction->discount = $request->input('discount');
+        $transaction->deduction = $request->input('deduction');
+        $transaction->description = $request->input('description');
+        $transaction->item_price = ($item->real_price*$transaction->item_qty*((100-$transaction->discount)/100))-$transaction->deduction;
+        $transaction->save();
         return Redirect::route('invoice.show', compact('invoice'));
     }
 

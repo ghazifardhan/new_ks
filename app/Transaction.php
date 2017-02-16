@@ -27,4 +27,12 @@ class Transaction extends Model
     public function invoice(){
     	return $this->belongsTo('App\Invoice');
     }
+
+    public function item(){
+        return $this->hasOne('App\Item', 'id', 'item_id');
+    }
+    
+    public function highlight(){
+        return $this->hasOne('App\Highlight', 'id', 'highlight_id');
+    }
 }

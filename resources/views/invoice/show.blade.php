@@ -27,9 +27,7 @@
     <button type="submit" class="btn btn-danger print-btn-transaction-pdf margin-right-1em"><span class='glyphicon glyphicon-print'></span> Print PDF</button>
 </td>
 <td>
-    <div class="invoiceCode display-none"><?php echo $invoice->invoice_code;?></div>
-    <input type="hidden" name="invoiceCode" value="<?php echo $invoice->invoice_code;?>" />
-    <button type="submit" class="btn btn-success print-btn-transaction-xls margin-right-1em"><span class='glyphicon glyphicon-print'></span> Print XLS</button>
+    <a href="{{ url('/invoice/test') }}" class="btn btn-success"><span class='glyphicon glyphicon-print'></span> Print XLS</a>
 </td>
 <!-- </form> -->
 </tr>
@@ -86,16 +84,16 @@
     </tr>
 </table>
 <br/>
-<table class="table table-bordered table-hover table-striped table-condensed">
+<table class="table table-bordered table-hover table-striped table-condensed table-responsive">
         <tr>
-            <th class='col-md-2'>#</th>
-            <th class='col-md-2'>Item Name</th>
-            <th class='col-md-2'>Qty</th>
-            <th class='col-md-2'>Unit</th>
-            <th class='col-md-2'>Discount</th>
-            <th class='col-md-2'>Potongan</th>
-            <th class='col-md-2'>Price</th>
-            <th class='col-md-2'>Description</th>
+            <th class='col-md-1'>#</th>
+            <th class='col-md-1'>Item Name</th>
+            <th class='col-md-1'>Qty</th>
+            <th class='col-md-1'>Unit</th>
+            <th class='col-md-1'>Discount</th>
+            <th class='col-md-1'>Potongan</th>
+            <th class='col-md-1'>Price</th>
+            <th class='col-md-1'>Description</th>
             <th class='col-md-2'>Menu</th>
             <!--<th>Option</th>-->
         </tr>
@@ -104,15 +102,15 @@
         @foreach($transaction as $row)
         <?php  $total += $row->item_price;  ?>
         <tr>
-            <td class='col-md-2'>{{ $x++ }}</td>
-            <td class='col-md-2'><?php echo $row->item_name; ?></td>
-            <td class='col-md-2'><?php echo $row->unit_name; ?></td>
-            <td class='col-md-2'><?php echo $row->item_qty; ?></td>
-            <td class='col-md-2'><?php echo $row->discount; ?></td>
-            <td class='col-md-2'><?php echo $row->deduction; ?></td>
-            <td class='col-md-2'><?php echo $row->item_price; ?></td>
+            <td class='col-md-1'>{{ $x++ }}</td>
+            <td class='col-md-1'><?php echo $row->item_name; ?></td>
+            <td class='col-md-1'><?php echo $row->unit_name; ?></td>
+            <td class='col-md-1'><?php echo $row->item_qty; ?></td>
+            <td class='col-md-1'><?php echo $row->discount; ?></td>
+            <td class='col-md-1'><?php echo $row->deduction; ?></td>
+            <td class='col-md-1'><?php echo $row->item_price; ?></td>
 			<td class='col-md-2'><?php echo $row->description; ?></td>
-			<td><input type="checkbox" name="delete[]" value="{{ $row->id }}">
+			<td><input type="checkbox" name="delete[]" value="{{ $row->id }}"><a href="{{ route('invoice.transaction.edit', [$invoice->id, $row->id]) }}" class="btn btn-info">Edit</a>
 			</td>
         </tr>
         @endforeach
@@ -140,8 +138,14 @@
         </tr>
         <tr>
             <td class='col-md-2' colspan="6"><strong>Grand Total</strong></td>
-            <td class='col-md-2'><strong>{{ $total - $invoice->voucher }}</td>
+            <td class='col-md-2'><strong>{{ $totalAll = $total - $invoice->voucher }}</td>
             <td class='col-md-2'></td>
         </tr>
     </table>
+    <?php
+
+    $invoice->total = $totalAll;
+    $invoice->update();
+
+    ?>
     @endsection

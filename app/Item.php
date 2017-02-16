@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     protected $table = 'item';
-    protected $fillable = ['item_name', 'category_id', 'unit_id', 'price', 'onqty', 'description', 'real_price', 'highlight_id'];
+    protected $fillable = ['item_name', 'category_id', 'unit_id', 'price', 'onqty', 'description', 'real_price', 'highlight_id', 'purchase_price', 'real_purchase_price'];
 
     protected $validate = [
     	'item_name' => 'required',
@@ -15,7 +15,9 @@ class Item extends Model
     	'unit_id' => 'required',
     	'price' => 'required',
     	'onqty' => 'required',
-    	'real_price' => 'required'
+    	'real_price' => 'required',
+        'purchase_price' => 'requried',
+        'real_purchase_price' => 'required',
     ];
 
     // Define Relationship with other table

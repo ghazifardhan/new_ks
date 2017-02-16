@@ -11,7 +11,6 @@
 |
 */
 
-
 Auth::routes();
 
 Route::get('/', function () {
@@ -51,13 +50,23 @@ Route::resource('user', 'UserController');
 // Transaction Route
 Route::resource('invoice.transaction', 'TransactionController');
 
+// Customer Route
+Route::resource('customer', 'CustomerController');
+
+// Voucher Route
+Route::resource('customer.voucher', 'VoucherController');
+
 // JSON Output
-Route::get('/customer', 'CustomerController@autocomplete');
+Route::get('/customerJson', 'CustomerController@autocomplete');
 Route::get('/customer/voucher', 'CustomerController@populateVoucher');
 Route::get('/itemJson', 'ItemController@itemJson');
 Route::get('/unitJson', 'ItemController@unitJson');
 
 Route::post('/batchDelete/{id}', ['as' => 'batchdelete', 'uses' => 'TransactionController@batchDelete']);
 
+Route::get('/form_print_invoice_by_date', ['as' => 'form_print_invoice_by_date', 'uses' => 'InvoiceController@formPrintInvoiceByDate']);
+Route::get('/print_invoice_by_date', ['as' => 'print_invoice_by_date', 'uses' => 'InvoiceController@printInvoiceByDate']);
 
 Route::get('/home', 'HomeController@index');
+
+Route::get('/test', 'HomeController@test');

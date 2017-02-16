@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 class HomeController extends Controller
 {
@@ -25,5 +27,10 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function test(){
+        $object = new PHPExcel();
+        return view('invoice/output/print_invoice_xls_rev', compact('object'));
     }
 }

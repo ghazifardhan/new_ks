@@ -52,7 +52,7 @@ class ItemController extends Controller
     	 			->join('category', 'item.category_id', '=', 'category.id')
     				->join('unit', 'item.unit_id', '=', 'unit.id')
     				->join('highlight', 'item.highlight_id', '=', 'highlight.id')
-    				->select('item.id', 'item.item_name', 'category.category_name', 'unit.unit_name', 'item.price', 'item.onqty', 'item.description', 'highlight.highlight_name')
+    				->select('item.id', 'item.item_name', 'category.category_name', 'unit.unit_name', 'item.price', 'item.onqty', 'item.description', 'highlight.highlight_name', 'item.purchase_price','item.real_purchase_price')
     				->where('item.item_name', 'like', '%'.$query.'%')
     				->orWhere('category.category_name', 'like', '%'.$query.'%')
     				->orWhere('unit.unit_name', 'like', '%'.$query.'%')
@@ -66,7 +66,7 @@ class ItemController extends Controller
     	 			->join('category', 'item.category_id', '=', 'category.id')
     				->join('unit', 'item.unit_id', '=', 'unit.id')
     				->join('highlight', 'item.highlight_id', '=', 'highlight.id')
-    				->select('item.id', 'item.item_name', 'category.category_name', 'unit.unit_name', 'item.price', 'item.onqty', 'item.description', 'highlight.highlight_name')
+    				->select('item.id', 'item.item_name', 'category.category_name', 'unit.unit_name', 'item.price', 'item.onqty', 'item.description', 'highlight.highlight_name', 'item.purchase_price','item.real_purchase_price')
     				->paginate(25);	
     	}
     	
@@ -94,6 +94,8 @@ class ItemController extends Controller
     				'price' => $request->input('price'),
     				'highlight_id' => $request->input('highlight_id'),
     				'description' => $request->input('description'),
+                    'purchase_price' => $request->input('purchase_price'),
+                    'real_purchase_price' =>$request->input('purchase_price') / $request->input('onqty'),
     				'real_price' => $request->input('price') / $request->input('onqty'),
     			]);
     	$this->item->save();
@@ -118,7 +120,9 @@ class ItemController extends Controller
     	$item->onqty = Input::get('onqty');
     	$item->price = Input::get('price');
     	$item->highlight_id = Input::get('highlight_id');
-    	$item->description = Input::get('description');
+        $item->description = Input::get('description');
+        $item->purchase_price = Input::get('purchase_price');
+    	$item->real_purchase_price = $item->purchase_price / $item->onqty;
     	$item->real_price = $item->price / $item->onqty;
     	$item->save();
     	return Redirect::route('item.index');

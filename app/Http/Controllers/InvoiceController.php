@@ -13,6 +13,11 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Redirect;
 use Illuminate\Support\Facades\Input;
+use PDF;
+use App\Transformers\InvoiceTransformer;
+use PHPExcel;
+use PHPExcel_IOFactory;
+use PHPExcel_Worksheet_Drawing;
 
 class InvoiceController extends Controller
 {
@@ -35,11 +40,14 @@ class InvoiceController extends Controller
     		$invoice = $this->invoice
     						->where('invoice_code', 'like', '%'.$query.'%')
     						->orWhere('customer_name', 'like', '%'.$query.'%')
+                            ->orderBy('created_at', 'desc')
     						->paginate(25);
     	} else {
-    		$invoice = $this->invoice->paginate(25);	
+    		$invoice = $this->invoice->orderBy('created_at', 'desc')->paginate(25);	
     	}
     	return view('invoice.index', compact('invoice'));
+        //$pdf = PDF::loadView('invoice.index', compact('invoice'));
+        //return $pdf->download('invoice.pdf');
     }
 
     public function create(){
@@ -140,5 +148,35 @@ class InvoiceController extends Controller
         $invoice = $this->invoice->find($id);
         $invoice->delete();
         return Redirect::route('invoice.index');
+    }
+
+    public function formPrintInvoiceByDate(){
+        return view('invoice.form_print_invoice_by_date');
+    }
+
+    public function printInvoiceByDate(Request $request){
+        $output = $request->get('output');
+        if($output == "pdf"){
+                $transformer = new InvoiceTransformer();
+                $invoiceDate1 = $request->get('date1');
+                $invoiceDate2 = $request->get('date2');
+                $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->whereBetween('invoice_date', [$invoiceDate1, $invoiceDate2])->get();
+                $data = $transformer->transform($invoice);
+                return view('invoice.output.print_invoice_by_date_pdf', compact('data'));
+                //$pdf = PDF::loadView('invoice.output.print_invoice_by_date_pdf', compact('data'));
+                //$pdf->setPaper('a4');
+                //return $pdf->stream();
+            } else {
+                
+                $objPHPExcel = new PHPExcel();
+                $objDrawing = new PHPExcel_Worksheet_Drawing();
+                $transformer = new InvoiceTransformer();
+                $invoiceDate1 = $request->get('date1');
+                $invoiceDate2 = $request->get('date2');
+                $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->whereBetween('invoice_date', [$invoiceDate1, $invoiceDate2])->get();
+                $data = $transformer->transform($invoice);
+                return view('invoice.output.print_invoice_by_date', compact('data', 'objPHPExcel','objDrawing'));
+
+                }
     }
 }

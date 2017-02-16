@@ -14,8 +14,17 @@ class Customer extends Model
     	'description'
     ];
 
+    public $validate = [
+    	'customer_name' => 'required',
+    	'customer_type' => 'required',
+    ];
+
     public function voucher(){
     	return $this->hasMany('App\Voucher');
+    }
+
+    public function customerType(){
+    	return $this->hasOne('App\CustomerType');
     }
 
 }
