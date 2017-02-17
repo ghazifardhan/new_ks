@@ -21,6 +21,7 @@ class InvoiceTransformer extends Transformer
             'customer_address_3' => $invoice->customer_address_3,
             'payment_method' => $invoice->payment_method,
             'payment_method_name' => $invoice->paymentMethod->name,
+            'invoice_date' => $invoice->invoice_date,
             'shipping_date' => $invoice->shipping_date,
             'voucher' => $invoice->voucher,
             'description' => $invoice->description,

@@ -1,15 +1,11 @@
 @extends('layouts.app')
 @section('content')
-<h2>Export Invoice</h2>
-{!! Form::open(array('class' => 'form-inline', 'method' => 'GET', 'route' => array('print_invoice_by_date'))) !!}
+<h2>Shipping Detail</h2>
+{!! Form::open(array('class' => 'form-inline', 'method' => 'GET', 'route' => array('print_shipping_detail'))) !!}
         <table class='table table-hover table-responsive table-bordered table-nonfluid'>
             <tr>
-                <td>From Date</td>
-                <td><input id="date1" type="date" name="date1" class='form-control'></td>
-            </tr>
-            <tr>
-                <td>To Date</td>
-                <td><input id="date2" type="date" name="date2" class='form-control'></td>
+                <td>Date</td>
+                <td><input id="fromDate" type="date" name="fromDate" class='form-control'></td>
             </tr>
             <tr>
                 <td>Output</td>
@@ -21,7 +17,7 @@
             <tr>
                 <td></td>
                 <td><button type="submit" name="submit" class="btn btn-success">Submit</button></td>
-            </tr>     
-        </table>
+            </tr>       
+        </table>    
 {!! Form::close() !!}
 @endsection

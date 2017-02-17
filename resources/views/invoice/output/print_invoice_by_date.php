@@ -71,7 +71,7 @@ $color = array(
 //$invoice->date2 = $_GET['dateTwo'];
 //$stmt = $invoice->invoiceByDate();
 //$nums = $stmt->rowCount();
-//$objPHPExcel->removeSheetByIndex(0);
+$objPHPExcel->removeSheetByIndex(0);
 //$x = 1;
 for($x=0;$x<count($data);$x++){
 
@@ -104,7 +104,7 @@ $objDrawing->setPath($header);
 $objDrawing->setWidthAndHeight(496,95);
 $objDrawing->setResizeProportional(true);
 $objDrawing->setCoordinates('A1');
-//$objDrawing->setWorksheet($newSheet);
+$objDrawing->setWorksheet($objPHPExcel->getSheet($x));
     
 $newSheet->getStyle('A15')->applyFromArray($styleArray);
 $newSheet->getStyle('A16')->applyFromArray($styleArray);
@@ -228,7 +228,7 @@ $objDrawing->setPath($logo);
 $objDrawing->setCoordinates('A'. $footerImg);
 $objDrawing->setWidthAndHeight(424,110);
 $objDrawing->setResizeProportional(true);
-$objDrawing->setWorksheet($newSheet);
+$objDrawing->setWorksheet($objPHPExcel->getSheet($x));
 $newSheet->setTitle("invoice-$x");
 //$x++;
 }

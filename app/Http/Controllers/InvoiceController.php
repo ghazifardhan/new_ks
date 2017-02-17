@@ -154,6 +154,14 @@ class InvoiceController extends Controller
         return view('invoice.form_print_invoice_by_date');
     }
 
+    public function formPrintDailyOmzet(){
+        return view('invoice.form_daily_omzet');
+    }
+
+    public function formPrintShippingDetail(){
+        return view('invoice.form_shipping_detail');
+    }
+
     public function printInvoiceByDate(Request $request){
         $output = $request->get('output');
         if($output == "pdf"){
@@ -175,7 +183,54 @@ class InvoiceController extends Controller
                 $invoiceDate2 = $request->get('date2');
                 $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->whereBetween('invoice_date', [$invoiceDate1, $invoiceDate2])->get();
                 $data = $transformer->transform($invoice);
-                return view('invoice.output.print_invoice_by_date', compact('data', 'objPHPExcel','objDrawing'));
+                abort(404);
+                //return view('invoice.output.print_invoice_by_date', compact('data', 'objPHPExcel','objDrawing'));
+
+                }
+    }
+
+    public function printDailyOmzet(Request $request){
+        $output = $request->get('output');
+        if($output == "pdf"){
+                $transformer = new InvoiceTransformer();
+                $fromDate = $request->get('fromDate');
+                $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->where('invoice_date', $fromDate)->get();
+                $data = $transformer->transform($invoice);
+                //return response($data);
+                //return view('invoice.output.print_detail_omzet_pdf', compact('data'));
+                abort(404);
+            } else {
+                
+                $objPHPExcel = new PHPExcel();
+                $objDrawing = new PHPExcel_Worksheet_Drawing();
+                $transformer = new InvoiceTransformer();
+                $fromDate = $request->get('fromDate');
+                $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->where('invoice_date', $fromDate)->get();
+                $data = $transformer->transform($invoice);
+                return view('invoice.output.print_daily_omzet_xls', compact('data', 'objPHPExcel','objDrawing'));
+
+                }
+    }
+
+    public function printShippingDetail(Request $request){
+        $output = $request->get('output');
+        if($output == "pdf"){
+                $transformer = new InvoiceTransformer();
+                $fromDate = $request->get('fromDate');
+                $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->where('invoice_date', $fromDate)->get();
+                $data = $transformer->transform($invoice);
+                //return response($data);
+                //return view('invoice.output.print_detail_omzet_pdf', compact('data'));
+                abort(404);
+            } else {
+                
+                $objPHPExcel = new PHPExcel();
+                $objDrawing = new PHPExcel_Worksheet_Drawing();
+                $transformer = new InvoiceTransformer();
+                $fromDate = $request->get('fromDate');
+                $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->where('invoice_date', $fromDate)->get();
+                $data = $transformer->transform($invoice);
+                return view('invoice.output.print_shipping_detail_xls_v2', compact('data', 'objPHPExcel','objDrawing'));
 
                 }
     }

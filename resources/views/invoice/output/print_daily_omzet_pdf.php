@@ -1,20 +1,20 @@
 <?php
-error_reporting(0);
-include '../../../models/Include.php';
-ob_start();
-$invoice->invoiceDate = $_GET['fromDate'];
+//error_reporting(0);
+//include '../../../models/Include.php';
+//ob_start();
+//$invoice->invoiceDate = $_GET['fromDate'];
 
-$stmt = $invoice->detailPacking();
-$stmt2 = $invoice->getShipping();
-$row2 = $stmt2->fetch(PDO::FETCH_OBJ);
-$num = $stmt->rowCount();
-$stmt3 = $invoice->getTotalInvoice();
-$num3 = $stmt3->rowCount();
-$invDate = $invoice->invoiceDate;
-$invDateFormat = date('l, d F Y', strtotime($invDate));
-$shipDate = $row2->shipping;
-$shipDateFormat = date('l, d F Y', strtotime($shipDate));
-if($num>0){
+//$stmt = $invoice->detailPacking();
+//$stmt2 = $invoice->getShipping();
+//$row2 = $stmt2->fetch(PDO::FETCH_OBJ);
+//$num = $stmt->rowCount();
+//$stmt3 = $invoice->getTotalInvoice();
+//$num3 = $stmt3->rowCount();
+//$invDate = $invoice->invoiceDate;
+$invDateFormat = date('l, d F Y', strtotime($data[$x]['invoice_date']));
+//$shipDate = $row2->shipping;
+$shipDateFormat = date('l, d F Y', strtotime($data[$x]['shipping_date']));
+//if($num>0){
 ?>
 <!DOCTYPE html>
 <html>
