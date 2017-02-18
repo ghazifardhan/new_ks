@@ -10,7 +10,6 @@ class InvoiceTransformer extends Transformer
 
     public function getTransformation($invoice)
     {   
-        $x = 0;
         return [
             'id' => $invoice->id,
             'invoice_code' => $invoice->invoice_code,

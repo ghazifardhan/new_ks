@@ -8,13 +8,15 @@ use App\PaymentMethod;
 use App\Customer;
 use App\Voucher;
 use App\InvoiceCodeGenerator;
-use App\transaction;
+use App\Transaction;
+use App\Item;
 use Validator;
 use App\Http\Controllers\Controller;
 use Redirect;
 use Illuminate\Support\Facades\Input;
 use PDF;
 use App\Transformers\InvoiceTransformer;
+use App\Transformers\TransactionTransformer;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Drawing;
@@ -162,6 +164,10 @@ class InvoiceController extends Controller
         return view('invoice.form_shipping_detail');
     }
 
+    public function formPrintDetailPacking(){
+        return view('invoice.form_detail_packing');
+    }
+
     public function printInvoiceByDate(Request $request){
         $output = $request->get('output');
         if($output == "pdf"){
@@ -196,6 +202,8 @@ class InvoiceController extends Controller
                 $fromDate = $request->get('fromDate');
                 $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->where('invoice_date', $fromDate)->get();
                 $data = $transformer->transform($invoice);
+                $pdf = PDF::loadView('invoice.output.print_daily_omzet_pdf', $data);
+                return $pdf->download('daily_omzet.pdf');
                 //return response($data);
                 //return view('invoice.output.print_detail_omzet_pdf', compact('data'));
                 abort(404);
@@ -231,6 +239,32 @@ class InvoiceController extends Controller
                 $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->where('invoice_date', $fromDate)->get();
                 $data = $transformer->transform($invoice);
                 return view('invoice.output.print_shipping_detail_xls_v2', compact('data', 'objPHPExcel','objDrawing'));
+
+                }
+    }
+
+    public function printDetailPacking(Request $request){
+        $output = $request->get('output');
+        if($output == "pdf"){
+                $transformer = new TransactionTransformer();
+                $fromDate = $request->get('fromDate');
+                $transaction = Transaction::with('item.unit', 'invoice')->get();
+                $data = $transformer->transform($transaction);
+                //return response($data);
+                //return view('invoice.output.print_detail_omzet_pdf', compact('data'));
+                abort(404);
+            } else {
+                
+                $objPHPExcel = new PHPExcel();
+                $objDrawing = new PHPExcel_Worksheet_Drawing();
+                $transformer = new TransactionTransformer();
+                $GLOBALS['trigger'] = $request->get('fromDate');
+                $transaction = Transaction::with(array('item.unit', 'item.highlight','invoice' => function($query){
+                    $query->where('invoice_date', $GLOBALS['trigger']);
+                }))->get();
+                $data = $transformer->transform($transaction);
+                //return response($data);
+                return view('invoice.output.print_detailpacking_xls', compact('data', 'objPHPExcel','objDrawing'));
 
                 }
     }

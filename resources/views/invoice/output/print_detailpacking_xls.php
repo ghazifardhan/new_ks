@@ -1,29 +1,30 @@
 <?php
+/*
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 date_default_timezone_set('Europe/London');
 
 if (PHP_SAPI == 'cli')
-	die('This example should only be run from a Web Browser');
+    die('This example should only be run from a Web Browser');
 
 require_once '../../../models/Include.php';
 require_once '../../../../phpexcel/Classes/PHPExcel.php';
 
 // query category
 // $invoiceCode = isset($_GET['invoice_code']) ? $_GET['invoice_code'] : die('ERROR: Item ID Not Found');
-
+*/
 // Create new PHPExcel object
-$objPHPExcel = new PHPExcel();
+//$objPHPExcel = new PHPExcel();
 
 // Set document properties
 $objPHPExcel->getProperties()->setCreator("KERANJANG SAYUR")
-							 ->setLastModifiedBy("KERANJANG SAYUR")
-							 ->setTitle("DETAIL PACKING")
-							 ->setSubject("DETAIL PACKING")
-							 ->setDescription("DETAIL PACKING OF KERANJANG SAYUR")
-							 ->setKeywords("DETAIL PACKING")
-							 ->setCategory("DETAIL PACKING");
+                             ->setLastModifiedBy("KERANJANG SAYUR")
+                             ->setTitle("DETAIL PACKING")
+                             ->setSubject("DETAIL PACKING")
+                             ->setDescription("DETAIL PACKING OF KERANJANG SAYUR")
+                             ->setKeywords("DETAIL PACKING")
+                             ->setCategory("DETAIL PACKING");
 
 $font = array(
     'font' => array(
@@ -100,16 +101,11 @@ $fillShip = array(
                 )
 );
 
-$invoice->invoiceDate = $_GET['fromDate'];
-$transaction->transactionDate = $invoice->invoiceDate;
-$stmt2 = $invoice->getShipping();
-$row2 = $stmt2->fetch(PDO::FETCH_OBJ);
-$stmt = $transaction->detailPackingSplit();
-$num = $stmt->rowCount();
-$invDate = $invoice->invoiceDate;
-$invDateFormat = date('l, d F Y', strtotime($invDate));
-$shipDate = $row2->shipping;
-$shipDateFormat = date('l, d F Y', strtotime($shipDate));
+//$stmt = $transaction->detailPackingSplit();
+$num = count($data);
+$invDate = $data[0]['invoice_date'];
+$invDateFormat = date('l, d F Y', strtotime($data[0]['invoice_date']));
+$shipDateFormat = date('l, d F Y', strtotime($data[0]['shipping_date']));
  
 
 $objPHPExcel->getActiveSheet()->getPageMargins()->setTop(0);
@@ -165,14 +161,16 @@ $objPHPExcel->setActiveSheetIndex(0)
 
 $row = 6;
 $prevGroup = "";
-while ($rowTrans = $stmt->fetch(PDO::FETCH_OBJ)){
-			$transaction->invoiceDate = $transaction->transactionDate;
-			$transaction->itemId = $rowTrans->item_id;
-			$stmtCount = $transaction->countItem();
-			$rowCount = $stmtCount->fetch(PDO::FETCH_OBJ);
-            $rows = $rowCount->countItem;
+for($x=0;$x<count($data);$x++){
+            //$transaction->invoiceDate = $transaction->transactionDate;
+            //$transaction->itemId = $rowTrans->item_id;
+            //$stmtCount = count($data);
+            //$rowCount = $stmtCount->fetch(PDO::FETCH_OBJ);
+            $test = array_count_values(array_column($data, "item_id"));
+            $z = $data[$x]['item_id'];
+            $rows = $test[$z];
             $nums = $row + $rows - 1;
-            $group = $rowTrans->item_name;
+            $group = $data[$x]['item_name'];
     
         
             $objPHPExcel->getActiveSheet()->getStyle('A'.$row.':F'.$row)->applyFromArray($border);
@@ -183,11 +181,11 @@ while ($rowTrans = $stmt->fetch(PDO::FETCH_OBJ)){
             $fill = array(
                 'fill' => array(
                     'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                    'color' => array('rgb' => preg_replace('/^#/', '', $rowTrans->highlight_color))
+                    'color' => array('rgb' => preg_replace('/^#/', '', $data[$x]['highlight_color']))
                     )
                 );
     
-            if($rowTrans->highlight_color != NULL){
+            if($data[$x]['highlight_color'] != NULL){
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$row)->applyFromArray($fill);
                 $objPHPExcel->getActiveSheet()->getStyle('D'.$row)->applyFromArray($fill);
                 $objPHPExcel->getActiveSheet()->getStyle('E'.$row)->applyFromArray($fill);
@@ -196,15 +194,15 @@ while ($rowTrans = $stmt->fetch(PDO::FETCH_OBJ)){
             if($group !==$prevGroup){
             $objPHPExcel->setActiveSheetIndex(0)
                         ->mergeCells('A'.$row.':A'.$nums)
-                        ->setCellValue('A'.$row, strtoupper($rowTrans->item_name));
+                        ->setCellValue('A'.$row, strtoupper($data[$x]['item_name']));
                         $prevGroup = $group;
             }
             $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('B'.$row, $rowTrans->invoice_code)
-                        ->setCellValue('C'.$row, $rowTrans->customer_name)
-                        ->setCellValue('D'.$row, $rowTrans->item_qty)
-                        ->setCellValue('E'.$row, $rowTrans->unit_name)
-                        ->setCellValue('F'.$row, $rowTrans->description);
+                        ->setCellValue('B'.$row, $data[$x]['invoice_code'])
+                        ->setCellValue('C'.$row, $data[$x]['customer_name'])
+                        ->setCellValue('D'.$row, $data[$x]['item_qty'])
+                        ->setCellValue('E'.$row, $data[$x]['unit_name'])
+                        ->setCellValue('F'.$row, $data[$x]['description']);
     $row++;
 }
 
@@ -218,7 +216,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 
 // Redirect output to a client’s web browser (Excel2007)
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header("Content-Disposition: attachment;filename=detail_packing-$invoice->invoiceDate.xlsx");
+header("Content-Disposition: attachment;filename=detail_packing-$invDate.xlsx");
 header('Cache-Control: max-age=0');
 
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');

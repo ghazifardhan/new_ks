@@ -65,7 +65,7 @@
                             <li><a href="{{ url('/invoice/create') }}" id="create_invoice">New Invoice</a></li>
                             <li><a href="{{ url('/invoice/') }}" id="show_invoice">Show Invoice</a></li>
                             <li><a href="{{ route('form_print_daily_omzet') }}" id="detail_packing">Daily Omzet</a></li>
-                            <li><a href="javascript://" id="detail_packing_pisah">Detail Packing</a></li>
+                            <li><a href="{{ route('form_print_detail_packing') }}" id="detail_packing_pisah">Detail Packing</a></li>
                             <li><a href="{{ route('form_print_shipping_detail') }}" id="shipping_invoice">Shipping Invoice</a></li>
                             <li><a href="{{ route('form_print_invoice_by_date') }}" id="export_invoice">Export Invoice</a></li>
                         </ul>

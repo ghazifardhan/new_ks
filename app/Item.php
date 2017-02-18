@@ -33,6 +33,12 @@ class Item extends Model
     	return $this->hasOne('App\Highlight','id','highlight_id');
     }
 
+    public function transaction(){
+        return $this->hasMany('App\Transaction');
+    }
+
+    
+
     public function validate(){
     	return $this->validate;
     }

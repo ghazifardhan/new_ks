@@ -143,13 +143,13 @@ $shipDateFormat = date('l, d F Y', strtotime($data[$x]['shipping_date']));
         <th class="t-center v-align">DIKALI</th>
     </tr>
     <?php
-    
+    $data[$x]['voucher'];
     $stmtInvoice = $invoice->detailPacking();
     while ($rowInvoice = $stmtInvoice->fetch(PDO::FETCH_OBJ)){
     $transaction->transactionCode = $rowInvoice->invoice_code;
     $stmtTrans = $transaction->index();
     $num = $stmtTrans->rowCount();
-    if($rowInvoice->voucher == 0){
+    if($data[$x]['voucher'] == 0){
         $temp1 = 4;
         $temp2 = 5;
         $temp3 = 2;
@@ -174,9 +174,9 @@ $shipDateFormat = date('l, d F Y', strtotime($data[$x]['shipping_date']));
                 echo "<p class='centerp'>" . strtoupper($rowInvoice->description) . "</p>";
                 echo "<p class='centerp'>" . strtoupper($rowInvoice->payment_method_name) . "</p>";
                 echo "<p class='centerp'>" . strtoupper($rowInvoice->description_2) . "</p>";
-                if($rowInvoice->voucher > 0){
+                if($data[$x]['voucher'] > 0){
                                 echo "POT/VOUCHER" . "<br/>";
-                                echo "<p class='boldp'>IDR " . number_format($rowInvoice->voucher,0,',','.') . "</p>";
+                                echo "<p class='boldp'>IDR " . number_format($data[$x]['voucher'],0,',','.') . "</p>";
                             } else { }
             ?>
         </td>
@@ -201,14 +201,14 @@ $shipDateFormat = date('l, d F Y', strtotime($data[$x]['shipping_date']));
             }
         } else { }
 
-        $totalBeforeDeduction = $rowInvoice->total + $rowInvoice->voucher;
+        $totalBeforeDeduction = $rowInvoice->total + $data[$x]['voucher'];
     ?>
     <tr>
         <td style="height: 10px; border-left: 0px; font-weight: bold;" colspan="3" class="v-align t-center">TOTAL</td>
         <td style="height: 10px; font-weight: bold;" class="v-align t-center"><?php echo "IDR " . number_format($totalBeforeDeduction,0,',','.'); ?></td>
     </tr>
     <?php
-        if($rowInvoice->voucher > 0){
+        if($data[$x]['voucher'] > 0){
         $totalAfterDeduction = $rowInvoice->total;
     ?>
     <tr>

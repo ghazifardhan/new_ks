@@ -67,10 +67,13 @@ Route::post('/batchDelete/{id}', ['as' => 'batchdelete', 'uses' => 'TransactionC
 Route::get('/form_print_invoice_by_date', ['as' => 'form_print_invoice_by_date', 'uses' => 'InvoiceController@formPrintInvoiceByDate']);
 Route::get('/form_print_daily_omzet', ['as' => 'form_print_daily_omzet', 'uses' => 'InvoiceController@formPrintDailyOmzet']);
 Route::get('/form_print_shipping_detail', ['as' => 'form_print_shipping_detail', 'uses' => 'InvoiceController@formPrintShippingDetail']);
+Route::get('/form_print_detail_packing', ['as' => 'form_print_detail_packing', 'uses' => 'InvoiceController@formPrintDetailPacking']);
 
 Route::get('/print_invoice_by_date', ['as' => 'print_invoice_by_date', 'uses' => 'InvoiceController@printInvoiceByDate']);
 Route::get('/print_daily_omzet', ['as' => 'print_daily_omzet', 'uses' => 'InvoiceController@printDailyOmzet']);
 Route::get('/print_shipping_detail', ['as' => 'print_shipping_detail', 'uses' => 'InvoiceController@printShippingDetail']);
+Route::get('/print_detail_packing', ['as' => 'print_detail_packing', 'uses' => 'InvoiceController@printDetailPacking']);
+
 
 Route::get('/home', 'HomeController@index');
 
