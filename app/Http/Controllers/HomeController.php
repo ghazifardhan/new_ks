@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use PHPExcel;
 use PHPExcel_IOFactory;
+use App\Invoice;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -26,7 +28,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+
+        $invoice = Invoice::select(DB::raw('invoice_date, sum(total) as total, count(invoice_code) as inv'))
+                    ->orderBy('invoice_date', 'desc')
+                    ->groupBy('invoice_date')
+                    ->paginate(25);
+
+        return view('home', compact('invoice'));
+        //return response($invoice);
     }
 
     public function test(){

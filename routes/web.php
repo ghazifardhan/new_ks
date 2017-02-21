@@ -58,7 +58,7 @@ Route::resource('customer.voucher', 'VoucherController');
 
 // JSON Output
 Route::get('/customerJson', 'CustomerController@autocomplete');
-Route::get('/customer/voucher', 'CustomerController@populateVoucher');
+Route::get('/populatevoucher', 'CustomerController@populateVoucher');
 Route::get('/itemJson', 'ItemController@itemJson');
 Route::get('/unitJson', 'ItemController@unitJson');
 

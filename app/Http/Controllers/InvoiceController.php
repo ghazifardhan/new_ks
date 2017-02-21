@@ -16,6 +16,7 @@ use Redirect;
 use Illuminate\Support\Facades\Input;
 use PDF;
 use App\Transformers\InvoiceTransformer;
+use App\Transformers\InvoiceShowTransformer;
 use App\Transformers\TransactionTransformer;
 use PHPExcel;
 use PHPExcel_IOFactory;
@@ -105,6 +106,19 @@ class InvoiceController extends Controller
         $invoiceCode->date = date("Y-m-d");
         $invoiceCode->save();
 
+        if($request->input('customer_id') != null){
+            $voucher = new Voucher();
+            $customer = $request->input('customer_id');
+            $voucher->fill([
+                    'customer_id' => $customer,
+                    'invoice_id' => $invoiceId,
+                    'credit' => $request->input('voucher'),
+                    'is_used' => 1,
+                    'is_debit' => 1,
+                    'description' => "",
+                ]);
+            $voucher->save();
+        }
 
         return Redirect::route('invoice.show', compact('invoice'));
     }
@@ -134,15 +148,17 @@ class InvoiceController extends Controller
     }
 
     public function show($id){
-        $invoice = $this->invoice->find($id);
+        $transformer = new InvoiceShowTransformer();
+        $invoice = $this->invoice->with('PaymentMethod')->find($id);
         $transaction = Transaction::join('item', 'transaction.item_id', '=', 'item.id')
                             ->join('unit', 'item.unit_id','=','unit.id')
                             ->join('highlight', 'item.highlight_id','=','highlight.id')
                             ->select('transaction.id', 'transaction.invoice_id', 'transaction.item_id', 'item.item_name', 'transaction.item_qty', 'unit.unit_name', 'transaction.item_price', 'transaction.discount', 'transaction.deduction','item.real_price','transaction.description', 'transaction.created_at', 'highlight.highlight_color')
-                            ->where('transaction.invoice_id','=',$invoice->id)
+                            ->where('transaction.invoice_id','=',$id)
                             ->get();
-        $res['result'] = $transaction;
-        //return response($res);
+        $data = $transformer->transform($invoice);
+        //$res['result'] = $invoice;
+        //return response($invoice);
         return view('invoice.show', compact('invoice', 'transaction'));
     }
 
@@ -176,6 +192,7 @@ class InvoiceController extends Controller
                 $invoiceDate2 = $request->get('date2');
                 $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->whereBetween('invoice_date', [$invoiceDate1, $invoiceDate2])->get();
                 $data = $transformer->transform($invoice);
+                //return response($data);
                 return view('invoice.output.print_invoice_by_date_pdf', compact('data'));
                 //$pdf = PDF::loadView('invoice.output.print_invoice_by_date_pdf', compact('data'));
                 //$pdf->setPaper('a4');
@@ -202,11 +219,11 @@ class InvoiceController extends Controller
                 $fromDate = $request->get('fromDate');
                 $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->where('invoice_date', $fromDate)->get();
                 $data = $transformer->transform($invoice);
-                $pdf = PDF::loadView('invoice.output.print_daily_omzet_pdf', $data);
-                return $pdf->download('daily_omzet.pdf');
+                //$pdf = PDF::loadView('invoice.output.print_daily_omzet_pdf', compact('data'));
+                //return $pdf->stream('daily_omzet.pdf');
                 //return response($data);
-                //return view('invoice.output.print_detail_omzet_pdf', compact('data'));
-                abort(404);
+                return view('invoice.output.print_daily_omzet_pdf', compact('data'));
+                //abort(404);
             } else {
                 
                 $objPHPExcel = new PHPExcel();
@@ -259,9 +276,16 @@ class InvoiceController extends Controller
                 $objDrawing = new PHPExcel_Worksheet_Drawing();
                 $transformer = new TransactionTransformer();
                 $GLOBALS['trigger'] = $request->get('fromDate');
-                $transaction = Transaction::with(array('item.unit', 'item.highlight','invoice' => function($query){
-                    $query->where('invoice_date', $GLOBALS['trigger']);
-                }))->get();
+                //$transaction = Transaction::with(array('item.unit', 'item.highlight','invoice' => function($query){
+                //    $query->where('invoice_date', $GLOBALS['trigger']);
+                //}))->get();
+                $transaction = Transaction::join('item','transaction.item_id','=','item.id')
+                    ->join('invoice','transaction.invoice_id','=','invoice.id')
+                    ->join('unit','item.unit_id','=','unit.id')
+                    ->join('highlight','item.highlight_id','=','highlight.id')
+                    ->select('transaction.id','item.id as item_id','item.item_name','invoice.invoice_date','invoice.invoice_code','invoice.shipping_date','invoice.customer_name','transaction.item_qty','unit.unit_name','transaction.description','highlight.highlight_color')
+                    ->where('invoice.invoice_date',$GLOBALS['trigger'])
+                    ->get();
                 $data = $transformer->transform($transaction);
                 //return response($data);
                 return view('invoice.output.print_detailpacking_xls', compact('data', 'objPHPExcel','objDrawing'));

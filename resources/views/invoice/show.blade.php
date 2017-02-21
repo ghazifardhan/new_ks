@@ -60,7 +60,7 @@
     </tr>
 	<tr>
         <td>Payment Method</td>
-        <td>: <?php echo $invoice->payment_method;?></td>
+        <td>: <?php echo $invoice->paymentMethod->name;?></td>
     </tr>
 	<tr>
         <td>Invoice Date</td>

@@ -7,6 +7,7 @@ use App\Customer;
 use App\CustomerType;
 use App\Voucher;
 use Redirect;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -35,7 +36,7 @@ class CustomerController extends Controller
     public function populateVoucher(Request $request){
     	$id = $request->get('customer_id');
     	
-    	$voucher = Voucher::where('customer_id','=',$id)->get();
+    	$voucher = Voucher::select(DB::raw('customer_id, SUM(IF(is_debit = 0, credit, -credit)) as credit'))->where('customer_id','=',$id)->groupBy('customer_id')->get();
 
     	return response($voucher);
 

@@ -136,15 +136,18 @@
     getDataVoucher();
     $('.chosen-select').chosen({width : "300px"});
     
+    var cId;
+
     function getDataVoucher(){
             $(".customerName").autocomplete({
                   source: 'http://localhost/new_ks/public/customerJson',
                   select: function(event, ui){
                     if(ui.item)
                     {
+                        $(".customerId").val(ui.item.id);
                         $.ajax({
                             type: "GET",
-                            url: "http://localhost/new_ks/public/customer/voucher",
+                            url: "http://localhost/new_ks/public/populatevoucher",
                             data: {customer_id:ui.item.id},
                             success: function(d){
                                 $('#voucherChooser').empty();
@@ -158,6 +161,11 @@
                     }
                 }
             });
+
+            $(".customerName").change(function(){
+                $(".customerId").val(cId);
+            }); 
+
             $('#voucherChooser').select2();
             $('#voucherChooser').change(function(){
                 var sum = 0;

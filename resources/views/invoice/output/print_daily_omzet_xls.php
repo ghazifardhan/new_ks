@@ -198,8 +198,8 @@ $objPHPExcel->getActiveSheet()->getStyle('C'.$desc.':C'.$desc2)->getAlignment()-
                 ->setCellValue('C'.$address2, $data[$x]['customer_address_2'])
                 ->setCellValue('C'.$address3, strtoupper($data[$x]['customer_address_3']))
                 ->setCellValue('C'.$desc, strtoupper($data[$x]['description']))
-                ->setCellValue('C'.$desc2, strtoupper($data[$x]['description_2']))
-                ->setCellValue('C'.$pmn, strtoupper($data[$x]['payment_method_name']));
+                ->setCellValue('C'.$desc2, strtoupper($data[$x]['payment_method_name']))
+                ->setCellValue('C'.$pmn, strtoupper($data[$x]['description_2']));
 
         if($data[$x]['voucher'] != 0){
             $objPHPExcel->getActiveSheet()->getStyle('C'.$voucher.':C'.$voucher)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);

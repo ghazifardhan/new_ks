@@ -20,7 +20,8 @@
 			</tr>
 			<tr>
 				<td>Customer Name</td>
-				<td><input type="text" name="customer_name" class="form-control customerName"/></td>
+				<td><input type="text" name="customer_name" class="form-control customerName"/>
+					<input type="hidden" name="customer_id" class="form-control customerId"/></td>
 			</tr>
 			<tr>
 				<td>Customer Phone</td>
@@ -77,4 +78,9 @@
                 <td><button type="submit" name="submit" class='btn btn-primary'><span class='glyphicon glyphicon-plus'></span> Submit</button></td>
             </tr>
         {!! Form::close() !!}
+        @stop
+        @section('script')
+        
+
+
         @endsection

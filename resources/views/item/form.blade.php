@@ -54,8 +54,6 @@
 			<tr>
                 <td class='col-md-2'>Highlight</td>
                 <td class='col-md-6'><select data-placeholder="Choose Highlight" id="highlight_id" name="highlight_id" class='form-control chosen-select'>
-                    <option value=""></option>
-                    <option value="">Non-Highlight</option>
                     @foreach($highlight as $highlight)
                     <option value="{{$highlight->id}}">{{$highlight->highlight_name}}</option>
                     @endforeach
