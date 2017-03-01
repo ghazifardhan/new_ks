@@ -21,6 +21,7 @@ use App\Transformers\TransactionTransformer;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Worksheet_Drawing;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
@@ -43,10 +44,10 @@ class InvoiceController extends Controller
     		$invoice = $this->invoice
     						->where('invoice_code', 'like', '%'.$query.'%')
     						->orWhere('customer_name', 'like', '%'.$query.'%')
-                            ->orderBy('created_at', 'desc')
+                            ->orderBy('id', 'desc')
     						->paginate(25);
     	} else {
-    		$invoice = $this->invoice->orderBy('created_at', 'desc')->paginate(25);	
+    		$invoice = $this->invoice->orderBy('id', 'desc')->paginate(25);	
     	}
     	return view('invoice.index', compact('invoice'));
         //$pdf = PDF::loadView('invoice.index', compact('invoice'));
@@ -155,6 +156,7 @@ class InvoiceController extends Controller
                             ->join('highlight', 'item.highlight_id','=','highlight.id')
                             ->select('transaction.id', 'transaction.invoice_id', 'transaction.item_id', 'item.item_name', 'transaction.item_qty', 'unit.unit_name', 'transaction.item_price', 'transaction.discount', 'transaction.deduction','item.real_price','transaction.description', 'transaction.created_at', 'highlight.highlight_color')
                             ->where('transaction.invoice_id','=',$id)
+                            ->orderBy('item.item_name','asc')
                             ->get();
         $data = $transformer->transform($invoice);
         //$res['result'] = $invoice;
@@ -190,10 +192,10 @@ class InvoiceController extends Controller
                 $transformer = new InvoiceTransformer();
                 $invoiceDate1 = $request->get('date1');
                 $invoiceDate2 = $request->get('date2');
-                $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->whereBetween('invoice_date', [$invoiceDate1, $invoiceDate2])->get();
+                $invoice = $this->invoice->with('transaction','item')->whereBetween('invoice_date', [$invoiceDate1, $invoiceDate2])->get();
                 $data = $transformer->transform($invoice);
-                //return response($data);
-                return view('invoice.output.print_invoice_by_date_pdf', compact('data'));
+                return response($data);
+                //return view('invoice.output.print_invoice_by_date_pdf', compact('data'));
                 //$pdf = PDF::loadView('invoice.output.print_invoice_by_date_pdf', compact('data'));
                 //$pdf->setPaper('a4');
                 //return $pdf->stream();
@@ -232,7 +234,9 @@ class InvoiceController extends Controller
                 $fromDate = $request->get('fromDate');
                 $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->where('invoice_date', $fromDate)->get();
                 $data = $transformer->transform($invoice);
-                return view('invoice.output.print_daily_omzet_xls', compact('data', 'objPHPExcel','objDrawing'));
+                $totaltest = $this->invoice->select(DB::raw('payment_method, sum(total) as total'))->where('invoice_date', $fromDate)->groupBy('payment_method')->get();
+                //return response($totalCash);
+                return view('invoice.output.print_daily_omzet_xls', compact('data', 'objPHPExcel','objDrawing','totaltest'));
 
                 }
     }
@@ -255,7 +259,8 @@ class InvoiceController extends Controller
                 $fromDate = $request->get('fromDate');
                 $invoice = $this->invoice->with('transaction.item.highlight','transaction.item.unit')->where('invoice_date', $fromDate)->get();
                 $data = $transformer->transform($invoice);
-                return view('invoice.output.print_shipping_detail_xls_v2', compact('data', 'objPHPExcel','objDrawing'));
+                $totaltest = $this->invoice->select(DB::raw('payment_method, sum(total) as total'))->where('invoice_date', $fromDate)->groupBy('payment_method')->get();
+                return view('invoice.output.print_shipping_detail_xls_v2', compact('data', 'objPHPExcel','objDrawing','totaltest'));
 
                 }
     }
@@ -285,6 +290,7 @@ class InvoiceController extends Controller
                     ->join('highlight','item.highlight_id','=','highlight.id')
                     ->select('transaction.id','item.id as item_id','item.item_name','invoice.invoice_date','invoice.invoice_code','invoice.shipping_date','invoice.customer_name','transaction.item_qty','unit.unit_name','transaction.description','highlight.highlight_color')
                     ->where('invoice.invoice_date',$GLOBALS['trigger'])
+                    ->orderBy('item.item_name','asc')
                     ->get();
                 $data = $transformer->transform($transaction);
                 //return response($data);

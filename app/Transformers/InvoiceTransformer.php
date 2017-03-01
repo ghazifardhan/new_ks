@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use Logaretm\Transformers\Transformer;
+use App\Invoice;
 
 class InvoiceTransformer extends Transformer
 {

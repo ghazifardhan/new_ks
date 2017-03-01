@@ -34,7 +34,7 @@ class Item extends Model
     }
 
     public function transaction(){
-        return $this->hasMany('App\Transaction');
+        return $this->hasMany('App\Transaction','item_id','id');
     }
 
     

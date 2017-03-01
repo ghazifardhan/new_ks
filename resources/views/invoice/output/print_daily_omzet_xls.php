@@ -303,11 +303,11 @@ $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A'.$totalInvoice, 'TOTAL INVOICE')
                 ->setCellValue('B'.$totalInvoice, count($data))
                 ->setCellValue('A'.$totalCash, 'TOTAL CASH')
-                ->setCellValue('B'.$totalCash, $totalInvoiceCash)
+                ->setCellValue('B'.$totalCash, $totaltest[0]['total'])
                 ->setCellValue('A'.$totalTransfer, 'TOTAL TRANSFER')
-                ->setCellValue('B'.$totalTransfer, $totalInvoiceTransfer)
+                ->setCellValue('B'.$totalTransfer, $totaltest[1]['total'])
                 ->setCellValue('A'.$grandTotal, 'GRAND TOTAL')
-                ->setCellValue('B'.$grandTotal, $totalInvoiceCash + $totalInvoiceTransfer);
+                ->setCellValue('B'.$grandTotal, $totaltest[0]['total'] + $totaltest[1]['total']);
 
 // Rename wo'2016-11-22't
 $objPHPExcel->setActiveSheetIndex(0)->setTitle('Sheet1');

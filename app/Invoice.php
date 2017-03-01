@@ -35,18 +35,19 @@ class Invoice extends Model
     ];
 
     public function transaction(){
-    	return $this->hasMany('App\Transaction', 'invoice_id');
-    }
-
-    public function item(){
-        return $this->hasOne('App\Item', 'id', 'item_id');
+    	return $this->hasMany('App\Transaction', 'invoice_id', 'id');
     }
 
     public function highlight(){
         return $this->hasOne('App\Highlight', 'id', 'highlight_id');
     }
+	
+	public function item(){
+		return $this->hasMany('App\Item','item_id','id');
+	}
 
     public function paymentMethod(){
         return $this->hasOne('App\PaymentMethod', 'id', 'payment_method');
     }
+	
 }
