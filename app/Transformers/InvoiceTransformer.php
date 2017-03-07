@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use Logaretm\Transformers\Transformer;
 use App\Invoice;
+use App\Transaction;
 
 class InvoiceTransformer extends Transformer
 {
@@ -27,7 +28,8 @@ class InvoiceTransformer extends Transformer
             'description' => $invoice->description,
             'description_2' => $invoice->description_2,
             'total' => $invoice->total,
-            'transaction' => $invoice->transaction,
+            'transaction' => $invoice->transactionView,
+
         ];
     }
 }

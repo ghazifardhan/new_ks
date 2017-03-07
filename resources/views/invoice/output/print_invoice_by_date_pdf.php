@@ -158,10 +158,10 @@
         $price = $data[$x]['transaction'][$y]['item_price'];
         ?>
         <tr>
-            <td class="test" style="background-color: <?php if($data[$x]['transaction'][$y]['item']['highlight']->highlight_color != NULL){ echo $data[$x]['transaction'][$y]['item']['highlight']->highlight_color;} else { echo 'white';} ?>;"><?php echo $data[$x]['transaction'][$y]['item']->item_name; ?></td>
-            <td class="test" style="background-color: <?php if($data[$x]['transaction'][$y]['item']['highlight']->highlight_color != NULL){ echo $data[$x]['transaction'][$y]['item']['highlight']->highlight_color;} else { echo 'white';} ?>;"><?php echo $data[$x]['transaction'][$y]->item_qty; ?></td>
-            <td class="test" style="background-color: <?php if($data[$x]['transaction'][$y]['item']['highlight']->highlight_color != NULL){ echo $data[$x]['transaction'][$y]['item']['highlight']->highlight_color;} else { echo 'white';} ?>;"><?php echo $data[$x]['transaction'][$y]['item']['unit']->unit_name; ?></td>
-            <td class="test align" style="background-color: <?php if($data[$x]['transaction'][$y]['item']['highlight']->highlight_color != NULL){ echo $data[$x]['transaction'][$y]['item']['highlight']->highlight_color;} else { echo 'white';} ?>;"><span>IDR</span> <?php
+            <td class="test" style="background-color: <?php if($data[$x]['transaction'][$y]['highlight_color'] != NULL){ echo $data[$x]['transaction'][$y]['highlight_color'];} else { echo 'white';} ?>;"><?php echo $data[$x]['transaction'][$y]['item_name']; ?></td>
+            <td class="test" style="background-color: <?php if($data[$x]['transaction'][$y]['highlight_color'] != NULL){ echo $data[$x]['transaction'][$y]['highlight_color'];} else { echo 'white';} ?>;"><?php echo $data[$x]['transaction'][$y]['item_qty']; ?></td>
+            <td class="test" style="background-color: <?php if($data[$x]['transaction'][$y]['highlight_color'] != NULL){ echo $data[$x]['transaction'][$y]['highlight_color'];} else { echo 'white';} ?>;"><?php echo $data[$x]['transaction'][$y]['unit_name']; ?></td>
+            <td class="test align" style="background-color: <?php if($data[$x]['transaction'][$y]['highlight_color'] != NULL){ echo $data[$x]['transaction'][$y]['highlight_color'];} else { echo 'white';} ?>;"><span>IDR</span> <?php
             echo number_format($price,0,',','.'); ?></td>
             <td style="font-style: italic; color: red;"><?php echo $data[$x]['transaction'][$y]['description']; ?></td>
         </tr>

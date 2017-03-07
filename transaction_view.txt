@@ -1,0 +1,12 @@
+CREATE VIEW transaction_view 
+AS
+SELECT i.id, i.invoice_code, i.invoice_date, i.shipping_date, t.id as t_id, t.item_id, it.item_name, t.item_qty, t.discount, t.deduction, t.item_price, t.description, u.unit_name, h.highlight_color
+FROM transaction as t
+LEFT JOIN invoice as i
+ON t.invoice_id = i.id
+LEFT JOIN item as it
+ON t.item_id = it.id
+LEFT JOIN unit as u
+ON it.unit_id = u.id
+LEFT JOIN highlight as h
+ON it.highlight_id = h.id

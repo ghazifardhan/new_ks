@@ -38,13 +38,17 @@ class Invoice extends Model
     	return $this->hasMany('App\Transaction', 'invoice_id', 'id');
     }
 
-    public function highlight(){
-        return $this->hasOne('App\Highlight', 'id', 'highlight_id');
+    public function transactionView(){
+        return $this->hasMany('App\TransactionView', 'id', 'id');
     }
-	
-	public function item(){
-		return $this->hasMany('App\Item','item_id','id');
-	}
+
+    public function item(){
+        return $this->hasOne('App\Item', 'id', 'transaction.item_id');
+    }
+
+    public function highlight(){
+        return $this->hasOne('App\Highlight','id','item.highlight_id');
+    }
 
     public function paymentMethod(){
         return $this->hasOne('App\PaymentMethod', 'id', 'payment_method');

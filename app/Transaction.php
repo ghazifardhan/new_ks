@@ -24,10 +24,6 @@ class Transaction extends Model
     	'item_qty' => 'required'
     ];
 
-    public function invoice(){
-    	return $this->belongsTo('App\Invoice');
-    }
-
     public function item(){
         return $this->hasOne('App\Item', 'id', 'item_id');
     }

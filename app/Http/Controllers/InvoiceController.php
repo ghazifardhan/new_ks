@@ -192,10 +192,13 @@ class InvoiceController extends Controller
                 $transformer = new InvoiceTransformer();
                 $invoiceDate1 = $request->get('date1');
                 $invoiceDate2 = $request->get('date2');
-                $invoice = $this->invoice->with('transaction','item')->whereBetween('invoice_date', [$invoiceDate1, $invoiceDate2])->get();
+                $invoice = $this->invoice->with(['transactionView' => function($q){
+                    $q->orderBy('item_name','asc');
+                }])
+                ->whereBetween('invoice_date', [$invoiceDate1, $invoiceDate2])->get();
                 $data = $transformer->transform($invoice);
-                return response($data);
-                //return view('invoice.output.print_invoice_by_date_pdf', compact('data'));
+                //return response($data);
+                return view('invoice.output.print_invoice_by_date_pdf', compact('data'));
                 //$pdf = PDF::loadView('invoice.output.print_invoice_by_date_pdf', compact('data'));
                 //$pdf->setPaper('a4');
                 //return $pdf->stream();

@@ -35,9 +35,7 @@ class Item extends Model
 
     public function transaction(){
         return $this->hasMany('App\Transaction','item_id','id');
-    }
-
-    
+    }    
 
     public function validate(){
     	return $this->validate;
