@@ -122,19 +122,20 @@ $objPHPExcel->getActiveSheet()->getPageSetup()
 
 $objPHPExcel->getActiveSheet()->getStyle('A1:E100')->applyFromArray($font);
 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(17);
-$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(23);
-$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(17);
-$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(5);
+$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(17);
+$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(23);
+$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(17);
 $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(5);
-$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(5);
+$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
 // Header
 
 $objPHPExcel->getActiveSheet()->getStyle('A1:B1')->applyFromArray($fillOrder);
 $objPHPExcel->getActiveSheet()->getStyle('A2:B2')->applyFromArray($fillShip);
-$objPHPExcel->getActiveSheet()->getStyle('A4:F5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-$objPHPExcel->getActiveSheet()->getStyle('A4:F5')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-$objPHPExcel->getActiveSheet()->getStyle('A4:F5')->applyFromArray($border);
-$objPHPExcel->getActiveSheet()->getStyle('A4:F5')->applyFromArray($bold);
+$objPHPExcel->getActiveSheet()->getStyle('A4:G5')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A4:G5')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A4:G5')->applyFromArray($border);
+$objPHPExcel->getActiveSheet()->getStyle('A4:G5')->applyFromArray($bold);
 $objPHPExcel->getActiveSheet()->getStyle('A1:B2')->applyFromArray($border);
 
 // Add some data
@@ -176,9 +177,12 @@ for($x=0;$x<count($data);$x++){
 
 
             $objPHPExcel->getActiveSheet()->getStyle('A'.$row.':G'.$row)->applyFromArray($border);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
             $objPHPExcel->getActiveSheet()->getStyle('B'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
             $objPHPExcel->getActiveSheet()->getStyle('E'.$row.':F'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $objPHPExcel->getActiveSheet()->getStyle('B'.$row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$row)->applyFromArray($color);
 
             $fill = array(
                 'fill' => array(

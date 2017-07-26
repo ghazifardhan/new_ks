@@ -23,13 +23,14 @@ class TransactionController extends Controller
     }
 
     public function index($id){
-    	
+
     }
 
     public function create($id){
     	$invoice = Invoice::find($id);
     	$item = Item::all();
-    	return view('transaction.form', compact('invoice', 'item'));
+      $form = config('app.form_generate');
+    	return view('transaction.form', compact('invoice', 'item', 'form'));
     }
 
     public function store(Request $request, $id){
@@ -45,15 +46,15 @@ class TransactionController extends Controller
 
             $item = Item::find($item_id[$x]);
             //print_r($item->item_name);
-            
+
             DB::table('transaction')->insert(
             [
-            'invoice_id' => $invoice->id, 
-            'item_id' => $item_id[$x], 
-            'item_qty'=>$item_qty[$x], 
+            'invoice_id' => $invoice->id,
+            'item_id' => $item_id[$x],
+            'item_qty'=>$item_qty[$x],
             'discount'=>$discount[$x],
-            'deduction'=>$deduction[$x], 
-            'description'=>$description[$x], 
+            'deduction'=>$deduction[$x],
+            'description'=>$description[$x],
             'item_price' => ($item->real_price*$item_qty[$x]*((100-$discount[$x])/100))-$deduction[$x], ]
             );
         }
@@ -88,7 +89,7 @@ class TransactionController extends Controller
         $array = $request->input('delete');
         //print_r($array);
         foreach($array as $key => $val){
-            DB::table('transaction')->where('id', '=', $val)->delete();    
+            DB::table('transaction')->where('id', '=', $val)->delete();
         }
         return Redirect::route('invoice.show', compact('invoice'));
     }

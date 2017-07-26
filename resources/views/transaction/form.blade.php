@@ -6,13 +6,14 @@
         <br/>
         <br/>
         <div id="myTable">
+				<?php for($i=1;$i<=$form;$i++){?>
         <div class="panel panel-default">
-        <div class="panel-heading">Item 1</div>
+        <div class="panel-heading" data-id="<?php echo $i;?>">Item 1</div>
         <div class="panel-body">
         <table class='table table-hover table-responsive table-bordered'>
 			<tr>
 				<td>Item Name</td>
-				<td><select id="item1" data-placeholder="Choose Item" name="item_id[]" class="form-control chosen-select" required>
+				<td><select id="item<?php echo $i;?>" data-placeholder="Choose Item" name="item_id[]" class="form-control chosen-select" required>
 					<option value=""></option>
 					@foreach($item as $row)
 					<option value="{{ $row->id }}">{{$row->item_name}}</option>
@@ -21,7 +22,7 @@
 			</tr>
 			<tr>
 				<td>Qty</td>
-				<td><div id="result1"><div class="input-group"><input type="number" name="item_qty[]" class="form-control" required/><span class="input-group-addon" id="basic-addon2"></span></div></div></td>
+				<td><div id="result<?php echo $i;?>"><div class="input-group"><input type="number" name="item_qty[]" class="form-control" required/><span class="input-group-addon" id="basic-addon2"></span></div></div></td>
 			</tr>
 			<tr>
 				<td>Discount</td>
@@ -31,37 +32,39 @@
 			</tr>
 			<tr>
 				<td>Potongan</td>
-				<td><input type="number" name="deduction[]" class="form-control" value="0"/></div>
+				<td><input type="number" name="deduction[]" class="form-control" value="0"/>
 				</td>
 			</tr>
 			<tr>
 				<td>Description</td>
 				<td><input type="text" name="description[]" class="form-control"/></td>
 			</tr>
-            
+
         </table>
-        </div></div></div>
+        </div></div>
+
+				<?php } ?>
         <tr>
             <td><button type="submit" name="submit" class='btn btn-primary'><span class='glyphicon glyphicon-plus'></span> Submit</button></td>
             <td><button type="button" class="btn btn-success add-btn-transaction" style="margin-top: -7px; padding: -2px; float: right;"><span class='glyphicon glyphicon-plus'></span> Add Item</button></td>
         </tr>
     {!! Form::close() !!}
-</div>
+</div></div>
 @stop
 @section('script')
 <script type="text/javascript">
-    var x = 1;
+    var x = $('.panel-heading').attr('data-id');
     getData(x);
     addMoreField();
-    getUnit(x);
+    getUnit();
 
     function getData(x){
-            $.ajax({ 
-            type: 'GET', 
-            url: 'http://keranjangsayur.com/invoice/new_ks/public/itemJson',
+            $.ajax({
+            type: 'GET',
+            url: 'http://localhost/new_ks/public/itemJson',
             data: {get_param: 'value'},
             dataType: 'json',
-            success: function (data) { 
+            success: function (data) {
                 $('select[id="item'+x+'"]').empty();
                 $('select[id="item'+x+'"]').append($('<option>').text(""));
                 $.each(data, function(index, element) {
@@ -71,14 +74,15 @@
             }
         });
         }
-    
-        function getUnit(i){
+
+        function getUnit(){
+
+				var i = $('.panel-heading').attr('data-id');	
         $('select[id="item'+i+'"]').change(function() {
             var x = $(this).val();
-
-            $.ajax({ 
-                    type: 'GET', 
-                    url: 'http://keranjangsayur.com/invoice/new_ks/public/unitJson',
+            $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost/new_ks/public/unitJson',
                     data: {item_id: x},
                     dataType: 'json',
                     success: function (data) {
@@ -89,14 +93,14 @@
                 });
         });
         }
-        
+
         function getUnit2(i){
         $('select[id="item'+i+'"]').change(function() {
             var x = $(this).val();
 
-            $.ajax({ 
-                    type: 'GET', 
-                    url: 'http://keranjangsayur.com/invoice/new_ks/public/unitJson',
+            $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost/new_ks/public/unitJson',
                     data: {item_id: x},
                     dataType: 'json',
                     success: function (data) {
