@@ -36,7 +36,7 @@ class ItemController extends Controller
                     ->join('unit', 'item.unit_id','=','unit.id')
                     ->select('item.id', 'item.item_name','unit.unit_name')
                     ->where('item.id','=',$id)
-                    ->get();
+                    ->first();
         return response($item);
     }
 
@@ -67,9 +67,9 @@ class ItemController extends Controller
     				->join('unit', 'item.unit_id', '=', 'unit.id')
     				->join('highlight', 'item.highlight_id', '=', 'highlight.id')
     				->select('item.id', 'item.item_name', 'category.category_name', 'unit.unit_name', 'item.price', 'item.onqty', 'item.description', 'highlight.highlight_name', 'item.purchase_price','item.real_purchase_price')
-    				->paginate(25);	
+    				->paginate(25);
     	}
-    	
+
     	//$res['result'] = $item;
     	//return response($res);
     	return view('item.index', compact('item'));
@@ -100,7 +100,7 @@ class ItemController extends Controller
     			]);
     	$this->item->save();
     	return Redirect::route('item.index');
-    	
+
     }
 
     public function edit($id){

@@ -34,7 +34,9 @@ class TransactionController extends Controller
     }
 
     public function store(Request $request, $id){
-    	$invoice = Invoice::find($id);
+        dd($request->input());
+
+        $invoice = Invoice::find($id);
         $array = $request->input('item_qty');
         $item_id = $request->input('item_id');
         $item_qty = $request->input('item_qty');
