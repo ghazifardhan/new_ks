@@ -303,18 +303,31 @@ class InvoiceController extends Controller
 
     public function printDetailPacking(Request $request){
         $output = $request->get('output');
+        $is_highlight = $request->get('is_highlight');
         if($output == "pdf"){
                 $transformer = new TransactionTransformer();
                 //$transaction = Transaction::with('item.unit', 'invoice')->get();
                 $GLOBALS['trigger'] = $request->get('fromDate');
-                $transaction = Transaction::join('item','transaction.item_id','=','item.id')
-                    ->join('invoice','transaction.invoice_id','=','invoice.id')
-                    ->join('unit','item.unit_id','=','unit.id')
-                    ->join('highlight','item.highlight_id','=','highlight.id')
-                    ->select('transaction.id','item.id as item_id','item.item_name','invoice.invoice_date','invoice.invoice_code','invoice.shipping_date','invoice.customer_name','transaction.item_qty','unit.unit_name','transaction.description','highlight.highlight_color')
-                    ->where('invoice.invoice_date',$GLOBALS['trigger'])
-                    ->orderBy('item.item_name','asc')
-                    ->get();
+                if($is_highlight == 'true'){
+                  $transaction = Transaction::join('item','transaction.item_id','=','item.id')
+                      ->join('invoice','transaction.invoice_id','=','invoice.id')
+                      ->join('unit','item.unit_id','=','unit.id')
+                      ->join('highlight','item.highlight_id','=','highlight.id')
+                      ->select('transaction.id','item.id as item_id','item.item_name','invoice.invoice_date','invoice.invoice_code','invoice.shipping_date','invoice.customer_name','transaction.item_qty','unit.unit_name','transaction.description','highlight.highlight_color')
+                      ->where('invoice.invoice_date',$GLOBALS['trigger'])
+                      ->where('highlight.highlight_color', '<>', '#FFFFFF')
+                      ->orderBy('item.item_name','asc')
+                      ->get();
+                } else {
+                  $transaction = Transaction::join('item','transaction.item_id','=','item.id')
+                      ->join('invoice','transaction.invoice_id','=','invoice.id')
+                      ->join('unit','item.unit_id','=','unit.id')
+                      ->join('highlight','item.highlight_id','=','highlight.id')
+                      ->select('transaction.id','item.id as item_id','item.item_name','invoice.invoice_date','invoice.invoice_code','invoice.shipping_date','invoice.customer_name','transaction.item_qty','unit.unit_name','transaction.description','highlight.highlight_color')
+                      ->where('invoice.invoice_date',$GLOBALS['trigger'])
+                      ->orderBy('item.item_name','asc')
+                      ->get();
+                }
 
                 $data = $transformer->transform($transaction);
 

@@ -8,6 +8,18 @@
                 <td><input id="fromDate" type="date" name="fromDate" class='form-control'></td>
             </tr>
             <tr>
+                <td>Highlight</td>
+                <td>
+                  <div class="radio">
+                    <label><input type="radio" name="is_highlight" value="false" checked>All Item</label>
+                  </div>
+                  <br>
+                  <div class="radio">
+                    <label><input type="radio" name="is_highlight" value="true">Highlight Only</label>
+                  </div>
+                </td>
+            </tr>
+            <tr>
                 <td>Output</td>
                 <td><select class="form-control" name="output">
                         <option value="pdf">PDF</option>
@@ -17,7 +29,7 @@
             <tr>
                 <td></td>
                 <td><button type="submit" name="submit" class="btn btn-success">Submit</button></td>
-            </tr>       
-        </table>    
+            </tr>
+        </table>
 {!! Form::close() !!}
 @endsection
