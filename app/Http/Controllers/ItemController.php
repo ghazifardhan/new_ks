@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Input;
 class ItemController extends Controller
 {
     public $item;
+    public $time;
 
     protected $rules = [
     	'item_name' => 'required'
@@ -23,6 +24,9 @@ class ItemController extends Controller
     public function __construct(){
     	$this->item = new Item();
         //$this->middleware('auth');
+
+        date_default_timezone_set("Asia/Jakarta");
+        $this->time = date("Y-m-d H:i:s");
     }
 
     public function itemJson(){

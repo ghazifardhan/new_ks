@@ -23,7 +23,7 @@
         </tr>
         <?php $prevGroup = ""; ?>
         @foreach($invoice as $row)
-        <?php 
+        <?php
         $group = $row->invoice_date;
         if($group !== $prevGroup){
             echo '<tr><td colspan="8" style="background-color: #84C126;"></tr>';
@@ -48,24 +48,28 @@
 						<li><a href="{{ route('invoice.edit', $row->id) }}">Edit Details</a></li>
 						<li><a> {!! Form::submit('Delete', array('class' => 'btn btn-danger')) !!}</a></li>
 					</ul>
-				<?php
-                    if($row->is_paid == '1'){
+				        <?php
+                    //if($row->is_paid == '1'){
                 ?>
-                <button class='btn btn-success unpaid-btn-invoice margin-right-1em' <?php if($_SESSION['level'] == '1' || $_SESSION['level'] == '2'){ echo 'disabled';} ?>>
-                    <span class='glyphicon glyphicon-ok'></span> Paid   
+                <!--
+                <button class='btn btn-success unpaid-btn-invoice margin-right-1em' <?php //if($_SESSION['level'] == '1' || $_SESSION['level'] == '2'){ echo 'disabled';} ?>>
+                    <span class='glyphicon glyphicon-ok'></span> Paid
                 </button>
+                -->
                 <?php
-                    } else {
+                    //} else {
                 ?>
+                <!--
                 <button class='btn btn-warning paid-btn-invoice margin-right-1em'>
-                    <span></span> Unpaid   
+                    <span></span> Unpaid
                 </button>
+                -->
                 <?php
-                    }
+                    //}
                 ?>
 				</div>
                 </td>
-                {!! Form::close() !!} 
+                {!! Form::close() !!}
         </tr>
         @endforeach
     </table>

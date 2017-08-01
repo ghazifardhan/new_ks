@@ -12,10 +12,14 @@ use Illuminate\Support\Facades\Input;
 class UserController extends Controller
 {
     public $user;
+    public $time;
 
     public function __construct(){
     	$this->user = new User();
     	$this->middleware('auth');
+
+      date_default_timezone_set("Asia/Jakarta");
+      $this->time = date("Y-m-d H:i:s");
     }
 
     public function index(){

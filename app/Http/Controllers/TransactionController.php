@@ -16,10 +16,14 @@ use Illuminate\Support\Facades\DB;
 class TransactionController extends Controller
 {
     public $transaction;
+    public $time;
 
     public function __construct(){
     	$this->transaction = new Transaction();
     	$this->middleware('auth');
+
+      date_default_timezone_set("Asia/Jakarta");
+      $this->time = date("Y-m-d H:i:s");
     }
 
     public function index($id){
@@ -57,7 +61,10 @@ class TransactionController extends Controller
             'discount'=>$discount[$x],
             'deduction'=>$deduction[$x],
             'description'=>$description[$x],
-            'item_price' => ($item->real_price*$item_qty[$x]*((100-$discount[$x])/100))-$deduction[$x], ]
+            'item_price' => ($item->real_price*$item_qty[$x]*((100-$discount[$x])/100))-$deduction[$x],
+            'created_at' => $this->time,
+            'updated_at' => $this->time,
+            ]
             );
         }
         return Redirect::route('invoice.show', compact('invoice'));

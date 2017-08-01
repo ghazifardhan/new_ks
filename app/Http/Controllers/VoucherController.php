@@ -11,9 +11,13 @@ use Redirect;
 class VoucherController extends Controller
 {
     public $voucher;
+    public $time;
 
     public function __construct(){
     	$this->voucher = new Voucher();
+
+      date_default_timezone_set("Asia/Jakarta");
+      $this->time = date("Y-m-d H:i:s");
     }
 
     public function create($id){

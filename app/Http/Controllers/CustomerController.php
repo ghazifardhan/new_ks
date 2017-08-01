@@ -12,10 +12,14 @@ use Illuminate\Support\Facades\DB;
 class CustomerController extends Controller
 {
     public $customer;
+    public $time;
 
     public function __construct(){
     	$this->customer = new Customer();
         $this->middleware('auth');
+
+        date_default_timezone_set("Asia/Jakarta");
+        $this->time = date("Y-m-d H:i:s");
     }
 
     public function autocomplete(){
@@ -35,7 +39,7 @@ class CustomerController extends Controller
 
     public function populateVoucher(Request $request){
     	$id = $request->get('customer_id');
-    	
+
     	$voucher = Voucher::select(DB::raw('customer_id, SUM(IF(is_debit = 0, credit, -credit)) as credit'))->where('customer_id','=',$id)->groupBy('customer_id')->get();
 
     	return response($voucher);
@@ -56,7 +60,7 @@ class CustomerController extends Controller
                             ->orWhere('description', 'like', '%'.$query.'%')
                             ->paginate(25);
         } else {
-            $customer = $this->customer->paginate(25);    
+            $customer = $this->customer->paginate(25);
         }
         return view('customer.index', compact('customer'));
     }

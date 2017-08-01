@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Input;
 class HighlightController extends Controller
 {
     public $highlight;
+    public $time;
 
     protected $rules = [
     	'highlight_name' => 'required',
@@ -21,6 +22,9 @@ class HighlightController extends Controller
     public function __construct(){
     	$this->highlight = new Highlight();
         $this->middleware('auth');
+
+        date_default_timezone_set("Asia/Jakarta");
+        $this->time = date("Y-m-d H:i:s");
     }
 
     public function index(Request $request){
@@ -37,7 +41,7 @@ class HighlightController extends Controller
     						->orWhere('description', 'like', '%'.$query.'%')
     						->paginate(25);
     	} else {
-    		$highlight = $this->highlight->paginate(25);	
+    		$highlight = $this->highlight->paginate(25);
     	}
     	return view('highlight.index', compact('highlight'));
     }
@@ -56,7 +60,7 @@ class HighlightController extends Controller
     			]);
     	$this->highlight->save();
     	return Redirect::route('highlight.index');
-    	
+
     }
 
     public function edit($id){

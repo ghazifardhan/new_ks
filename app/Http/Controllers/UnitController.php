@@ -12,17 +12,21 @@ use Illuminate\Support\Facades\Input;
 class UnitController extends Controller
 {
     public $unit;
+    public $time;
 
     public function __construct(){
     	$this->unit = new Unit();
         $this->middleware('auth');
+
+        date_default_timezone_set("Asia/Jakarta");
+        $this->time = date("Y-m-d H:i:s");
     }
 
     protected $rules = [
     	'unit_name' => 'required'
     ];
 
-    
+
 
     public function index(Request $request){
     	$query = $request->get('query');
@@ -38,7 +42,7 @@ class UnitController extends Controller
     						->orWhere('description', 'like', '%'.$query.'%')
     						->paginate(25);
     	} else {
-    		$unit = $this->unit->paginate(25);	
+    		$unit = $this->unit->paginate(25);
     	}
     	return view('unit.index', compact('unit'));
     }

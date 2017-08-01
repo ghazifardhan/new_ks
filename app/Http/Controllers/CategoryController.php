@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Input;
 
 class CategoryController extends Controller
 {
-    
+
     public $category;
+    public $time;
 
     protected $rules = [
     	'category_name' => 'required'
@@ -21,6 +22,9 @@ class CategoryController extends Controller
     public function __construct(){
     	$this->category = new Category();
         $this->middleware('auth');
+
+        date_default_timezone_set("Asia/Jakarta");
+        $this->time = date("Y-m-d H:i:s");
     }
 
     public function index(Request $request){
@@ -37,7 +41,7 @@ class CategoryController extends Controller
     						->orWhere('description', 'like', '%'.$query.'%')
     						->paginate(25);
     	} else {
-    		$category = $this->category->paginate(25);	
+    		$category = $this->category->paginate(25);
     	}
     	return view('category.index', compact('category'));
     }
@@ -55,7 +59,7 @@ class CategoryController extends Controller
     			]);
     	$this->category->save();
     	return Redirect::route('category.index');
-    	
+
     }
 
     public function edit($id){
